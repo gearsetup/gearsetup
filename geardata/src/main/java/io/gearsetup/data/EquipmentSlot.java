@@ -9,7 +9,7 @@ package io.gearsetup.data;
  * @author Ian Caffey
  * @since 1.0
  */
-public enum Slot {
+public enum EquipmentSlot {
     AMMUNITION,
     BODY,
     CAPE,
