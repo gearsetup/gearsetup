@@ -21,7 +21,7 @@ public interface WornItemRequirementVisitor<T> {
      * {@link WornItemRequirement#accept(WornItemRequirementVisitor)} by which
      * <a href="https://en.wikipedia.org/wiki/Double_dispatch">double dispatch</a> can be accomplished by each
      * implementation of {@link WornItemRequirement} forwarding the method call to the appropriate
-     * {@code WornItemRequirement#visit(T)} variant.
+     * {@code WornItemRequirementVisitor#visit(T)} variant.
      * <p>
      * {@link QuestRequirement} will forward to this method in {@link WornItemRequirement#accept(WornItemRequirementVisitor)}.
      *
@@ -37,7 +37,7 @@ public interface WornItemRequirementVisitor<T> {
      * {@link WornItemRequirement#accept(WornItemRequirementVisitor)} by which
      * <a href="https://en.wikipedia.org/wiki/Double_dispatch">double dispatch</a> can be accomplished by each
      * implementation of {@link WornItemRequirement} forwarding the method call to the appropriate
-     * {@code WornItemRequirement#visit(T)} variant.
+     * {@code WornItemRequirementVisitor#visit(T)} variant.
      * <p>
      * {@link SkillRequirement} will forward to this method in {@link WornItemRequirement#accept(WornItemRequirementVisitor)}.
      *
