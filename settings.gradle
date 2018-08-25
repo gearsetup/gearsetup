@@ -1,3 +1,4 @@
 rootProject.name = 'gearsetup'
 include 'geardata'
 include 'immutables'
+include 'lombok'
