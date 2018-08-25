@@ -1,1 +1,2 @@
 rootProject.name = 'gearsetup'
+include 'geardata'
