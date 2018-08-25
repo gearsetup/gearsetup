@@ -12,6 +12,7 @@ repositories {
 }
 
 dependencies {
+    compile group: 'com.google.guava', name: 'guava', version: '23.0'
     compile group: 'org.immutables', name: 'gson', version: '2.6.3'
     runtime group: 'org.immutables', name: 'gson', version: '2.6.3'
     compileOnly group: 'org.immutables', name: 'value', version: '2.6.3'
