@@ -3,8 +3,8 @@ package io.gearsetup.data;
 import org.immutables.gson.Gson.ExpectedSubtypes;
 
 /**
- * A representation of the <a href="http://oldschoolrunescape.wikia.com/wiki/Attack_speed">attack speed</a> statistics
- * for a weapon in <a href="https://oldschool.runescape.com/">Old School Runescape</a>.
+ * A representation of the <a href="http://oldschoolrunescape.wikia.com/wiki/Attack_speed">attack speed</a> for a weapon
+ * in <a href="https://oldschool.runescape.com/">Old School Runescape</a>.
  * <p>
  * <a href="http://oldschoolrunescape.wikia.com/wiki/Weapons">Weapons</a> operate at a fixed interval when equipped and
  * their <a href="http://oldschoolrunescape.wikia.com/wiki/Attack_speed">attack speed</a> can be represented as hit intervals.
@@ -28,30 +28,30 @@ import org.immutables.gson.Gson.ExpectedSubtypes;
  * <li>Toxic blowpipe has a different attack speed between players and for monsters.</li>
  * </ul>
  * More detailed information regarding <a href="http://oldschoolrunescape.wikia.com/wiki/Attack_speed">attack speed</a>
- * statistics for a weapon can be found <a href="http://oldschoolrunescape.wikia.com/wiki/Weapon_slot_table">here</a>
- * for single-handed weapons and <a href="http://oldschoolrunescape.wikia.com/wiki/Two-handed_slot_table">here</a>
+ * for a weapon can be found <a href="http://oldschoolrunescape.wikia.com/wiki/Weapon_slot_table">here</a> for
+ * single-handed weapons and <a href="http://oldschoolrunescape.wikia.com/wiki/Two-handed_slot_table">here</a>
  * for two-handed weapons.
  *
  * @author Ian Caffey
  * @since 1.0
  */
 //required for gson adapters to support polymorphism
-@ExpectedSubtypes({DynamicAttackSpeedStatistics.class, FixedAttackSpeedStatistics.class, VariableAttackSpeedStatistics.class})
-public interface AttackSpeedStatistics {
+@ExpectedSubtypes({TargetDependentAttackSpeed.class, FixedAttackSpeed.class, TypeDependentAttackSpeed.class})
+public interface AttackSpeed {
     /**
-     * Accepts an {@link AttackSpeedStatisticsVisitor} to visit an implementation of {@link AttackSpeedStatistics}.
+     * Accepts an {@link AttackSpeedVisitor} to visit an implementation of {@link AttackSpeed}.
      * <p>
-     * Implementations of {@link AttackSpeedStatistics} are responsible for forwarding calls to the respective
-     * {@code AttackSpeedStatisticsVisitor#visit(T)} method for their implementation.
+     * Implementations of {@link AttackSpeed} are responsible for forwarding calls to the respective
+     * {@code AttackSpeedVisitor#visit(T)} method for their implementation.
      * <p>
-     * {@link AttackSpeedStatisticsVisitor} defines a separate {@code AttackSpeedStatisticsVisitor#visit(T)} method for each
-     * expected implementation of {@link AttackSpeedStatistics}. It is considered an error to create an implementation of
-     * {@link AttackSpeedStatistics} that is not covered by the visitor or for the {@link AttackSpeedStatistics} to do
+     * {@link AttackSpeedVisitor} defines a separate {@code AttackSpeedVisitor#visit(T)} method for each
+     * expected implementation of {@link AttackSpeed}. It is considered an error to create an implementation of
+     * {@link AttackSpeed} that is not covered by the visitor or for the {@link AttackSpeed} to do
      * nothing in this method.
      *
      * @param visitor the visitor to accept
      * @param <T>     the return type of the visitation of an implementation class
      * @return the value the visitor produces after visiting an implementation class
      */
-    <T> T accept(AttackSpeedStatisticsVisitor<T> visitor);
+    <T> T accept(AttackSpeedVisitor<T> visitor);
 }

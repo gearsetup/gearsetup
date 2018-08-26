@@ -18,7 +18,7 @@ import org.immutables.value.Value.Immutable;
 @Immutable
 @Gson.TypeAdapters
 @ImmutableGearSetupStyle
-public interface FixedAttackSpeedStatistics extends AttackSpeedStatistics {
+public interface FixedAttackSpeed extends AttackSpeed {
     /**
      * Represents the fixed rate of speed of attacking during combat.
      * <p>
@@ -39,9 +39,9 @@ public interface FixedAttackSpeedStatistics extends AttackSpeedStatistics {
     int getSpeed();
 
     /**
-     * Accepts an {@link AttackSpeedStatisticsVisitor} to visit an implementation of {@link AttackSpeedStatistics}.
+     * Accepts an {@link AttackSpeedVisitor} to visit an implementation of {@link AttackSpeed}.
      * <p>
-     * {@link AttackSpeedStatisticsVisitor} is forwarded to {@link AttackSpeedStatisticsVisitor#visit(FixedAttackSpeedStatistics)}
+     * {@link AttackSpeedVisitor} is forwarded to {@link AttackSpeedVisitor#visit(FixedAttackSpeed)}
      * and the result of invoking the visit method is returned.
      *
      * @param visitor the visitor to accept
@@ -49,7 +49,7 @@ public interface FixedAttackSpeedStatistics extends AttackSpeedStatistics {
      * @return the value the visitor produces after visiting a fixed attack speed statistics
      */
     @Override
-    default <T> T accept(AttackSpeedStatisticsVisitor<T> visitor) {
+    default <T> T accept(AttackSpeedVisitor<T> visitor) {
         return visitor.visit(this);
     }
 }
