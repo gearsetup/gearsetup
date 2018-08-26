@@ -90,13 +90,13 @@ public class MaximumWeightedDisjointSet {
         List<T> elements = ImmutableList.copyOf(candidates);
         for (int row = 0; row < size; row++) {
             T source = elements.get(row);
-            double disjointSetWeight = weight.applyAsDouble(source); //starting element for row is always considered
+            double disjointSetWeight = weight.applyAsDouble(source); //row owner is always considered
             for (int column = 0; column < size; column++) {
                 T destination = elements.get(column);
                 boolean intersects = !Collections.disjoint(source, destination);
                 intersections[row][column] |= intersects;
                 if (!intersects) {
-                    disjointSetWeight += weight.applyAsDouble(destination);
+                    disjointSetWeight += weight.applyAsDouble(destination); //only include weight of disjoint elements
                 }
             }
             if (disjointSetWeight > maximumDisjointSetWeight) {
