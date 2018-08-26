@@ -1,4 +1,12 @@
 allprojects {
     group 'gearsetup'
     version '0.1-ALPHA'
+
+    apply plugin: 'java'
+
+    sourceCompatibility = 1.8
+
+    repositories {
+        mavenCentral()
+    }
 }
