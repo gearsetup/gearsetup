@@ -1,4 +1,4 @@
 allprojects {
-    it.group 'gearsetup'
-    it.version '0.1-ALPHA'
+    group 'gearsetup'
+    version '0.1-ALPHA'
 }
