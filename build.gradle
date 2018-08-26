@@ -1,7 +1,9 @@
 allprojects {
     group 'gearsetup'
     version '0.1-ALPHA'
+}
 
+subprojects {
     apply plugin: 'java'
 
     sourceCompatibility = 1.8
