@@ -5,8 +5,8 @@ import org.immutables.gson.Gson;
 import org.immutables.value.Value.Immutable;
 
 /**
- * A representation of the <a href="http://oldschoolrunescape.wikia.com/wiki/Attack_speed">attack speed</a> statistics
- * for a weapon which attacks using a fixed rate in <a href="https://oldschool.runescape.com/">Old School Runescape</a>.
+ * A representation of the <a href="http://oldschoolrunescape.wikia.com/wiki/Attack_speed">attack speed</a> for a weapon
+ * which attacks using a fixed rate in <a href="https://oldschool.runescape.com/">Old School Runescape</a>.
  *
  * <a href="http://oldschoolrunescape.wikia.com/wiki/Attack_speed">Attack speed</a> for a weapon resolve to a fixed rate
  * before the weapon begins operating. The attack speed can not be altered by any consumables, rather it is determined by
@@ -44,8 +44,8 @@ public interface FixedAttackSpeed extends AttackSpeed {
      * and the result of invoking the visit method is returned.
      *
      * @param visitor the visitor to accept
-     * @param <T>     the return type of the visitation of a fixed attack speed statistics
-     * @return the value the visitor produces after visiting a fixed attack speed statistics
+     * @param <T>     the return type of the visitation of a fixed attack speed
+     * @return the value the visitor produces after visiting a fixed attack speed
      */
     @Override
     default <T> T accept(AttackSpeedVisitor<T> visitor) {
