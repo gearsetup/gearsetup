@@ -35,6 +35,17 @@ public class OptimalGearSetup {
      * weight of a piece of {@link Equipment} that occupies that set of {@link EquipmentSlot}, and then the set of disjoint
      * {@link EquipmentSlot} is converted back to a set of {@link Equipment} by mapping each slot back to its maximum
      * weight {@link Equipment} calculated previously.
+     * <p>
+     * Time Complexity: {@code O(n)} where n is the number of candidates. The weighting of each piece of equipment must
+     * be calculated and the call to {@link MaximumWeightedDisjointSet#find(Set, ToDoubleFunction)}. While finding the
+     * maximum weighted disjoint set is {@code O(m^2)}, {@link EquipmentSlot} is bounded at 12 currently for
+     * <a href="https://oldschool.runescape.com/">Old School Runescape</a> as there are 11 slots that {@link Equipment}
+     * can occupy and a special case for two-handed equipment which occupies both {@link EquipmentSlot#WEAPON} and
+     * {@link EquipmentSlot#SHIELD}, so the call to find the maximum weighted disjoint set of equipment slots is bounded
+     * by a constant 12.
+     * <p>
+     * Space Complexity: {@code O(n)} where n is the number of candidates. A map containing the weights for candidates
+     * and the maximum weights for equipment slots and sets for unique slot combinations and maximum disjoint slot sets.
      *
      * @param candidates the candidates to consider when finding optimal gear setup
      * @param weight     the weight function to apply to each candidate when maximizing
