@@ -16,6 +16,7 @@ import java.util.Set;
  * Equipment is a special type of item that can be equipped in the equipped inventory and will give a character equipment bonuses.
  *
  * @author Ian Caffey
+ * @since 1.0
  */
 @Immutable
 @Gson.TypeAdapters
