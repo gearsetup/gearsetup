@@ -1,4 +1,4 @@
-package io.gearsetup.data;
+package io.gearsetup;
 
 /**
  * A representation of a <a href="https://en.wikipedia.org/wiki/Visitor_pattern">visitor</a> to the

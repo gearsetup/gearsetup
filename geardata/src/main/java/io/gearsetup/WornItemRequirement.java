@@ -1,4 +1,4 @@
-package io.gearsetup.data;
+package io.gearsetup;
 
 import org.immutables.gson.Gson.ExpectedSubtypes;
 

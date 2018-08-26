@@ -1,4 +1,4 @@
-package io.gearsetup.data;
+package io.gearsetup;
 
 /**
  * An enumeration of the <a href="http://oldschoolrunescape.wikia.com/wiki/Attack_types">attack types</a> in

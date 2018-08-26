@@ -1,4 +1,4 @@
-package io.gearsetup.data;
+package io.gearsetup;
 
 /**
  * An enumeration of the <a href="http://oldschoolrunescape.wikia.com/wiki/Skills">skills</a> in <a href="https://oldschool.runescape.com/">Old School Runescape</a>.
