@@ -1,0 +1,4 @@
+dependencies {
+    compile project(':gearsetup-model')
+    testCompile project(':testing')
+}

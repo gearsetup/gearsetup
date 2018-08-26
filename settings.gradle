@@ -1,4 +1,5 @@
 rootProject.name = 'gearsetup'
+include 'gearsetup-core'
 include 'gearsetup-model'
 include 'immutables'
 include 'lombok'
