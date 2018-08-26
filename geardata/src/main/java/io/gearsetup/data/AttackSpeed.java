@@ -36,7 +36,7 @@ import org.immutables.gson.Gson.ExpectedSubtypes;
  * @since 1.0
  */
 //required for gson adapters to support polymorphism
-@ExpectedSubtypes({TargetDependentAttackSpeed.class, FixedAttackSpeed.class, TypeDependentAttackSpeed.class})
+@ExpectedSubtypes({FixedAttackSpeed.class, TargetDependentAttackSpeed.class, TypeDependentAttackSpeed.class})
 public interface AttackSpeed {
     /**
      * Accepts an {@link AttackSpeedVisitor} to visit an implementation of {@link AttackSpeed}.
