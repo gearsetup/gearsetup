@@ -1,5 +1,5 @@
 rootProject.name = 'gearsetup'
-include 'geardata'
+include 'gearsetup-model'
 include 'immutables'
 include 'lombok'
 include 'testing'
