@@ -11,7 +11,7 @@ import java.util.Set;
  * A representation of a piece of <a href="http://oldschoolrunescape.wikia.com/wiki/Equipment">equipment</a> in
  * <a href="https://oldschool.runescape.com/">Old School Runescape</a>.
  * <p>
- * <img src="https://vignette.wikia.nocookie.net/2007scape/images/1/12/Worn_equipment_tab.png"/>
+ * <img src="https://vignette.wikia.nocookie.net/2007scape/images/1/12/Worn_equipment_tab.png" alt="Worn Equipment">
  * </p>
  * Equipment is a special type of item that can be equipped in the equipped inventory and will give a character equipment bonuses.
  *

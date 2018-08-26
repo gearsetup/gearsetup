@@ -8,8 +8,8 @@ import org.immutables.gson.Gson.ExpectedSubtypes;
  * <p>
  * <a href="http://oldschoolrunescape.wikia.com/wiki/Weapons">Weapons</a> operate at a fixed interval when equipped and
  * their <a href="http://oldschoolrunescape.wikia.com/wiki/Attack_speed">attack speed</a> can be represented as hit intervals.
- * <p>
- * <table>
+ *
+ * <table summary="Attack speed hit interval and timing breakdown">
  * <tr><th>Attack speed</th><th>Hit interval</th><th>Time</th></tr>
  * <tr><td>7</td><td>3</td><td>1.8s</td></tr>
  * <tr><td>6</td><td>4</td><td>2.4s</td></tr>
@@ -19,7 +19,7 @@ import org.immutables.gson.Gson.ExpectedSubtypes;
  * <tr><td>2</td><td>8</td><td>4.8s</td></tr>
  * <tr><td>1</td><td>9</td><td>5.4s</td></tr>
  * </table>
- * </p>
+ *
  * The determined <a href="http://oldschoolrunescape.wikia.com/wiki/Attack_speed">attack speed</a> for a weapon can vary
  * depending on the type of weapon.
  * <ul>

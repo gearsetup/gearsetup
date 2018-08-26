@@ -21,8 +21,8 @@ import org.immutables.value.Value.Immutable;
 public interface FixedAttackSpeed extends AttackSpeed {
     /**
      * Represents the fixed rate of speed of attacking during combat.
-     * <p>
-     * <table>
+     *
+     * <table summary="Attack speed hit interval and timing breakdown">
      * <tr><th>Attack speed</th><th>Hit interval</th><th>Time</th></tr>
      * <tr><td>7</td><td>3</td><td>1.8s</td></tr>
      * <tr><td>6</td><td>4</td><td>2.4s</td></tr>
@@ -32,7 +32,6 @@ public interface FixedAttackSpeed extends AttackSpeed {
      * <tr><td>2</td><td>8</td><td>4.8s</td></tr>
      * <tr><td>1</td><td>9</td><td>5.4s</td></tr>
      * </table>
-     * </p>
      *
      * @return the fixed rate of speed for the weapon
      */

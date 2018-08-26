@@ -8,7 +8,7 @@ import org.immutables.value.Value.Immutable;
  * A representation of the <a href="http://oldschoolrunescape.wikia.com/wiki/Equipment_Stats">equipment statistics</a>
  * for a piece of equipment in <a href="https://oldschool.runescape.com/">Old School Runescape</a>.
  * <p>
- * <img src="https://vignette.wikia.nocookie.net/2007scape/images/3/38/Equipment_Stats_interface.png"/>
+ * <img src="https://vignette.wikia.nocookie.net/2007scape/images/3/38/Equipment_Stats_interface.png" alt="Equipment Stats">
  * </p>
  * {@link CombatStatistics} are the bonuses given by the armour and weapons that a player is wearing. The bonuses an
  * item provides are placed into three different categories: Attack bonus, Defence bonus, and Other bonuses.
