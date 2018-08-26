@@ -68,17 +68,18 @@ public class OptimalGearSetup {
         Map<Set<EquipmentSlot>, Equipment> maximumWeightForSlot = new HashMap<>();
         candidates.forEach(equipment -> {
             Set<EquipmentSlot> occupiedSlots = equipment.getOccupiedSlots();
-            //first equipment found for slot
-            if (!maximumWeightForSlot.containsKey(occupiedSlots)) {
-                maximumWeightForSlot.put(occupiedSlots, equipment);
+            Equipment previousMaximum = maximumWeightForSlot.putIfAbsent(occupiedSlots, equipment);
+            //first equipment found for slot, no need to compare the weights
+            if (previousMaximum == null) {
                 return;
             }
             double currentWeight = weights.get(equipment);
-            double existingWeight = weights.get(maximumWeightForSlot.get(occupiedSlots));
-            //replace maximum equipment for slot if weight is greater than the existing weight
-            if (currentWeight > existingWeight) {
-                maximumWeightForSlot.put(occupiedSlots, equipment);
+            double existingWeight = weights.get(previousMaximum);
+            if (currentWeight <= existingWeight) {
+                return;
             }
+            //replace maximum equipment for slot if weight is greater than the existing weight
+            maximumWeightForSlot.put(occupiedSlots, equipment);
         });
         //calculate all unique slot combinations and maximize those combinations
         Set<Set<EquipmentSlot>> uniqueSlotCombinations = candidates.stream()
