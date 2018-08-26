@@ -21,6 +21,16 @@ import java.util.function.ToDoubleFunction;
  * <a href="https://en.wikipedia.org/wiki/Maximum_disjoint_set">Maximum disjoint set</a> algorithm is when the weighting
  * function is {@code equipment -> equipment.getOccupiedSlots().size()} which then maximizes the cardinality of occupied
  * slots.
+ * <p>
+ * Examples:
+ * <p>
+ * Finding the equipment setup that maximizes prayer bonus:
+ * <p>
+ * {@code Set<Equipment> highestPrayerBonus = OptimalGearSetup.find(candidates, equipment -> equipment.getCombatBonuses().getPrayerBonus());}
+ * <p>
+ * Finding the equipment setup that occupies the most equipment slots:
+ * <p>
+ * {@code Set<Equipment> mostSlotsUsed = OptimalGearSetup.find(candidates, equipment -> equipment.getOccupiedSlots().size());}
  *
  * @author Ian Caffey
  * @since 1.0
