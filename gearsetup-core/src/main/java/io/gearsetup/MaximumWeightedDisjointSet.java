@@ -86,16 +86,16 @@ public class MaximumWeightedDisjointSet {
         }
         int maximumDisjointSetIndex = -1;
         double maximumDisjointSetWeight = -Double.MAX_VALUE;
-        boolean[][] intersections = new boolean[size][size];
+        boolean[][] disjoint = new boolean[size][size];
         List<T> elements = ImmutableList.copyOf(candidates);
         for (int row = 0; row < size; row++) {
             T source = elements.get(row);
             double disjointSetWeight = weight.applyAsDouble(source); //row owner is always considered
             for (int column = 0; column < size; column++) {
                 T destination = elements.get(column);
-                boolean intersects = !Collections.disjoint(source, destination);
-                intersections[row][column] |= intersects;
-                if (!intersects) {
+                boolean disjointed = Collections.disjoint(source, destination);
+                disjoint[row][column] |= disjointed;
+                if (disjointed) {
                     disjointSetWeight += weight.applyAsDouble(destination); //only include weight of disjoint elements
                 }
             }
@@ -108,7 +108,7 @@ public class MaximumWeightedDisjointSet {
         builder.add(elements.get(maximumDisjointSetIndex));
         //add all sets from the maximum disjoint set row that do not intersect
         for (int i = 0; i < size; i++) {
-            if (!intersections[maximumDisjointSetIndex][i]) {
+            if (disjoint[maximumDisjointSetIndex][i]) {
                 builder.add(elements.get(i));
             }
         }
