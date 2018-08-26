@@ -20,7 +20,7 @@ import java.util.Set;
 @Immutable
 @Gson.TypeAdapters
 @ImmutableGearSetupStyle
-public interface WornItem {
+public interface Equipment {
     /**
      * Represents the unique identifier for the <a href="http://oldschoolrunescape.wikia.com/wiki/Items">equipment</a>.
      *
@@ -38,7 +38,7 @@ public interface WornItem {
     /**
      * Represents the set of {@link EquipmentSlot} that are occupied by the equipment when equipped.
      * <p>
-     * Two-handed weapons are the only {@link WornItem} that occupy multiple slots.
+     * Two-handed weapons are the only {@link Equipment} that occupy multiple slots.
      *
      * @return the set of occupied slots
      */
@@ -58,8 +58,8 @@ public interface WornItem {
     /**
      * Represents the attack speed of the equipment.
      * <p>
-     * {@link WornItem} which occupy the {@link EquipmentSlot#WEAPON} will have an {@link AttackSpeed}. All other items
-     * will not have one.
+     * {@link Equipment} which occupy the {@link EquipmentSlot#WEAPON} slot will have an {@link AttackSpeed}.
+     * Otherwise, the {@link Equipment} will not have one.
      *
      * @return the weapon attack speed or {@link Optional#empty()}
      */
@@ -70,7 +70,7 @@ public interface WornItem {
      *
      * @return the requirements to use a piece of equipment
      */
-    Set<WornItemRequirement> getRequirements();
+    Set<EquipmentRequirement> getRequirements();
 
     /**
      * Represents the weight of the equipment in kilograms.

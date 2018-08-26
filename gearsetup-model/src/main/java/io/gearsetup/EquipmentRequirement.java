@@ -14,21 +14,21 @@ import org.immutables.gson.Gson.ExpectedSubtypes;
  * @since 1.0
  */
 @ExpectedSubtypes({QuestRequirement.class, SkillRequirement.class}) //required for gson adapters to support polymorphism
-public interface WornItemRequirement {
+public interface EquipmentRequirement {
     /**
-     * Accepts a {@link WornItemRequirementVisitor} to visit an implementation of {@link WornItemRequirement}.
+     * Accepts a {@link EquipmentRequirementVisitor} to visit an implementation of {@link EquipmentRequirement}.
      * <p>
-     * Implementations of {@link WornItemRequirement} are responsible for forwarding calls to the respective
-     * {@code WornItemRequirementVisitor#visit(T)} method for their implementation.
+     * Implementations of {@link EquipmentRequirement} are responsible for forwarding calls to the respective
+     * {@code EquipmentRequirementVisitor#visit(T)} method for their implementation.
      * <p>
-     * {@link WornItemRequirementVisitor} defines a separate {@code WornItemRequirementVisitor#visit(T)} method for each
-     * expected implementation of {@link WornItemRequirement}. It is considered an error to create an implementation of
-     * {@link WornItemRequirement} that is not covered by the visitor or for the {@link WornItemRequirement} to do
+     * {@link EquipmentRequirementVisitor} defines a separate {@code EquipmentRequirementVisitor#visit(T)} method for each
+     * expected implementation of {@link EquipmentRequirement}. It is considered an error to create an implementation of
+     * {@link EquipmentRequirement} that is not covered by the visitor or for the {@link EquipmentRequirement} to do
      * nothing in this method.
      *
      * @param visitor the visitor to accept
      * @param <T>     the return type of the visitation of an implementation class
      * @return the value the visitor produces after visiting an implementation class
      */
-    <T> T accept(WornItemRequirementVisitor<T> visitor);
+    <T> T accept(EquipmentRequirementVisitor<T> visitor);
 }

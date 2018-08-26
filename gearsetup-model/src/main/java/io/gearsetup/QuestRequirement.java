@@ -20,19 +20,19 @@ import org.immutables.value.Value.Immutable;
 @Immutable
 @Gson.TypeAdapters
 @ImmutableGearSetupStyle
-public interface QuestRequirement extends WornItemRequirement {
+public interface QuestRequirement extends EquipmentRequirement {
     /**
      * Represents the name of the <a href="http://oldschoolrunescape.wikia.com/wiki/Quests">quest</a> required to be
-     * completed for a worn item to be equipped.
+     * completed for an item to be equipped.
      *
-     * @return the name of the quest to complete to equip a worn item
+     * @return the name of the quest to complete to equip an item
      */
     String getQuestName();
 
     /**
-     * Accepts a {@link WornItemRequirementVisitor} to visit an implementation of {@link WornItemRequirement}.
+     * Accepts a {@link EquipmentRequirementVisitor} to visit an implementation of {@link EquipmentRequirement}.
      * <p>
-     * {@link WornItemRequirementVisitor} is forwarded to {@link WornItemRequirementVisitor#visit(QuestRequirement)}
+     * {@link EquipmentRequirementVisitor} is forwarded to {@link EquipmentRequirementVisitor#visit(QuestRequirement)}
      * and the result of invoking the visit method is returned.
      *
      * @param visitor the visitor to accept
@@ -40,7 +40,7 @@ public interface QuestRequirement extends WornItemRequirement {
      * @return the value the visitor produces after visiting a quest requirement
      */
     @Override
-    default <T> T accept(WornItemRequirementVisitor<T> visitor) {
+    default <T> T accept(EquipmentRequirementVisitor<T> visitor) {
         return visitor.visit(this);
     }
 }

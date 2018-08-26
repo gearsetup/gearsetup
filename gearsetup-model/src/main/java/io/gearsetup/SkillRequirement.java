@@ -21,7 +21,7 @@ import org.immutables.value.Value.Immutable;
 @Immutable
 @Gson.TypeAdapters
 @ImmutableGearSetupStyle
-public interface SkillRequirement extends WornItemRequirement {
+public interface SkillRequirement extends EquipmentRequirement {
     /**
      * Represents the {@link Skill} in which the character level must meet or exceed {@link SkillRequirement#getLevel()}.
      *
@@ -30,16 +30,16 @@ public interface SkillRequirement extends WornItemRequirement {
     Skill getSkill();
 
     /**
-     * Represents the level in {@link SkillRequirement#getSkill()} the character must meet or exceed to equip a worn item.
+     * Represents the level in {@link SkillRequirement#getSkill()} the character must meet or exceed to equip an item.
      *
-     * @return the required level for equipping a worn item
+     * @return the required level for equipping an item
      */
     int getLevel();
 
     /**
-     * Accepts a {@link WornItemRequirementVisitor} to visit an implementation of {@link WornItemRequirement}.
+     * Accepts a {@link EquipmentRequirementVisitor} to visit an implementation of {@link EquipmentRequirement}.
      * <p>
-     * {@link WornItemRequirementVisitor} is forwarded to {@link WornItemRequirementVisitor#visit(SkillRequirement)}
+     * {@link EquipmentRequirementVisitor} is forwarded to {@link EquipmentRequirementVisitor#visit(SkillRequirement)}
      * and the result of invoking the visit method is returned.
      *
      * @param visitor the visitor to accept
@@ -47,7 +47,7 @@ public interface SkillRequirement extends WornItemRequirement {
      * @return the value the visitor produces after visiting a skill requirement
      */
     @Override
-    default <T> T accept(WornItemRequirementVisitor<T> visitor) {
+    default <T> T accept(EquipmentRequirementVisitor<T> visitor) {
         return visitor.visit(this);
     }
 }
