@@ -2,9 +2,6 @@ plugins {
     id 'java'
 }
 
-group 'gearsetup'
-version '0.1-ALPHA'
-
 sourceCompatibility = 1.8
 
 repositories {
