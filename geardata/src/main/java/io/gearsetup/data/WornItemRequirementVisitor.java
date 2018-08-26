@@ -10,6 +10,7 @@ package io.gearsetup.data;
  * {@link WornItemRequirement} while the implementation handles the dispatching to the appropriate method call through
  * {@link WornItemRequirement#accept(WornItemRequirementVisitor)}.
  *
+ * @param <T> the type of value returned from visiting an implementation class
  * @author Ian Caffey
  * @since 1.0
  */
