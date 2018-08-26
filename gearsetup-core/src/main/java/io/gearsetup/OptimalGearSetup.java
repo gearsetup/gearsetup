@@ -73,7 +73,6 @@ public class OptimalGearSetup {
             if (previousMaximum == null || weights.get(equipment) <= weights.get(previousMaximum)) {
                 return;
             }
-            //replace maximum equipment for slot if weight is greater than the existing weight
             maximumWeightForSlot.put(occupiedSlots, equipment);
         });
         //calculate all unique slot combinations and maximize those combinations
