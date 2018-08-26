@@ -2,13 +2,13 @@
 Analytics library for optimizing equipment and inventory setup for activities across Runescape.
 
 ## Overview
- - [geardata](https://github.com/gearsetup/gearsetup/geardata) 
+ - [geardata](https://github.com/gearsetup/gearsetup/tree/master/geardata) 
    - Module containing the core models for equipment metadata
- - [immutables](https://github.com/gearsetup/gearsetup/immutables)
+ - [immutables](https://github.com/gearsetup/gearsetup/tree/master/immutables)
    - Module containing the [Immutables](https://github.com/immutables/immutables) styles
- - [lombok](https://github.com/gearsetup/gearsetup/lombok)
+ - [lombok](https://github.com/gearsetup/gearsetup/tree/master/lombok)
    - Module containing the [Lombok](https://github.com/rzwitserloot/lombok) configuration
- - [testing](https://github.com/gearsetup/gearsetup/testing)
+ - [testing](https://github.com/gearsetup/gearsetup/tree/master/testing)
    - Module containing the [junit](https://github.com/junit-team/junit4) utilities
  
 ## License
