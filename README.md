@@ -4,6 +4,8 @@ Analytics library for optimizing equipment and inventory setup for activities ac
 ## Overview
  - [gearsetup-core](https://github.com/gearsetup/gearsetup/tree/master/gearsetup-core) 
    - Module containing the algorithms used in finding optimal equipment and inventory setups
+ - [gearsetup-gson](https://github.com/gearsetup/gearsetup/tree/master/gearsetup-gson)
+   - Module containing the [gson](https://github.com/google/gson) utilities for serializing [gearsetup](https://github.com/gearsetup/gearsetup) models
  - [gearsetup-model](https://github.com/gearsetup/gearsetup/tree/master/gearsetup-model) 
    - Module containing the core models for equipment metadata
  - [immutables](https://github.com/gearsetup/gearsetup/tree/master/immutables)
