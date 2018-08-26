@@ -9,8 +9,8 @@ import org.immutables.value.Value.Immutable;
  * that pertain to the bonuses used when calculating the likelihood of hitting/taking a hit from an enemy
  * in <a href="https://oldschool.runescape.com/">Old School Runescape</a>.
  * <p>
- * Each piece of equipment has both <a href="http://oldschoolrunescape.wikia.com/wiki/Attack">Attack</a> statistics
- * and <a href="http://oldschoolrunescape.wikia.com/wiki/Defence">Defence</a> statistics. Attack bonuses
+ * Each piece of equipment has both <a href="http://oldschoolrunescape.wikia.com/wiki/Attack">Attack</a> bonuses
+ * and <a href="http://oldschoolrunescape.wikia.com/wiki/Defence">Defence</a> bonuses. Attack bonuses
  * are compared against the relevant defence bonuses of an enemy to determine the likelihood of hitting an enemy. Defence
  * bonuses are compared against the relevant attack bonuses of an enemy to determine the likelihood of being hit
  * by an enemy and vice versa, a monsters likelihood of hitting a player.
@@ -21,7 +21,7 @@ import org.immutables.value.Value.Immutable;
 @Immutable
 @Gson.TypeAdapters
 @ImmutableGearSetupStyle
-public interface AttackTypeStatistics {
+public interface AttackTypeBonuses {
     /**
      * Represents the equipment combat bonus when using {@link AttackType#STAB} in combat.
      * <p>

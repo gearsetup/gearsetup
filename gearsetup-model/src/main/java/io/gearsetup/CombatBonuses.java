@@ -10,7 +10,7 @@ import org.immutables.value.Value.Immutable;
  * <p>
  * <img src="https://vignette.wikia.nocookie.net/2007scape/images/3/38/Equipment_Stats_interface.png" alt="Equipment Stats">
  * </p>
- * {@link CombatStatistics} are the bonuses given by the armour and weapons that a player is wearing. The bonuses an
+ * {@link CombatBonuses} are the bonuses given by the armour and weapons that a player is wearing. The bonuses an
  * item provides are placed into three different categories: Attack bonus, Defence bonus, and Other bonuses.
  * These bonuses, in addition to level of the player's relevant combat skills and the attack style used, are used to
  * calculate both the damage dealt and received during combat, and the likelihood of an attack being successful.
@@ -21,9 +21,9 @@ import org.immutables.value.Value.Immutable;
 @Immutable
 @Gson.TypeAdapters
 @ImmutableGearSetupStyle
-public interface CombatStatistics {
+public interface CombatBonuses {
     /**
-     * Represents the offensive combat statistics used in the calculations for damage likelihood between two characters.
+     * Represents the offensive combat bonuses used in the calculations for damage likelihood between two characters.
      * <p>
      * Attack bonuses are compared against the relevant defence bonuses of an enemy to determine the likelihood of hitting
      * an enemy. Defence bonuses are compared against the relevant attack bonuses of an enemy to determine the likelihood
@@ -31,10 +31,10 @@ public interface CombatStatistics {
      *
      * @return the offensive combat bonuses
      */
-    AttackTypeStatistics getAttackBonuses();
+    AttackTypeBonuses getAttackBonuses();
 
     /**
-     * Represents the defensive combat statistics used in the calculations for damage likelihood between two characters.
+     * Represents the defensive combat bonuses used in the calculations for damage likelihood between two characters.
      * <p>
      * Attack bonuses are compared against the relevant defence bonuses of an enemy to determine the likelihood of hitting
      * an enemy. Defence bonuses are compared against the relevant attack bonuses of an enemy to determine the likelihood
@@ -42,7 +42,7 @@ public interface CombatStatistics {
      *
      * @return the defensive combat bonuses
      */
-    AttackTypeStatistics getDefenceBonuses();
+    AttackTypeBonuses getDefenceBonuses();
 
     /**
      * Represents the amount in which prayer rate slows from its original rate.

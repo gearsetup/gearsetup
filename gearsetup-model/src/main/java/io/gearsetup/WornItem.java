@@ -53,7 +53,7 @@ public interface WornItem {
      *
      * @return the combat bonuses given by the item
      */
-    CombatStatistics getCombatStatistics();
+    CombatBonuses getCombatBonuses();
 
     /**
      * Represents the attack speed of the equipment.
