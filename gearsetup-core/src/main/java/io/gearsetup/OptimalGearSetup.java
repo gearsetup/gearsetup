@@ -83,7 +83,6 @@ public class OptimalGearSetup {
         //calculate all unique slot combinations and maximize those combinations
         Set<Set<EquipmentSlot>> uniqueSlotCombinations = candidates.stream()
                 .map(Equipment::getOccupiedSlots)
-                .distinct()
                 .collect(ImmutableSet.toImmutableSet());
         Set<Set<EquipmentSlot>> maximumDisjointSets = MaximumWeightedDisjointSet.find(
                 uniqueSlotCombinations,
