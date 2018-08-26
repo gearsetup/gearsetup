@@ -2,7 +2,7 @@
 Analytics library for optimizing equipment and inventory setup for activities across Runescape.
 
 ## Overview
- - [geardata](https://github.com/gearsetup/gearsetup/tree/master/geardata) 
+ - [gearsetup-model](https://github.com/gearsetup/gearsetup/tree/master/gearsetup-model) 
    - Module containing the core models for equipment metadata
  - [immutables](https://github.com/gearsetup/gearsetup/tree/master/immutables)
    - Module containing the [Immutables](https://github.com/immutables/immutables) styles
