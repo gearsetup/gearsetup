@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.function.ToDoubleFunction;
 
 /**
- * A representation of a variant of <a href="https://en.wikipedia.org/wiki/Maximum_disjoint_set">Maximum disjoint set</a>
+ * A utility class providing a variant of <a href="https://en.wikipedia.org/wiki/Maximum_disjoint_set">Maximum disjoint set</a>
  * that calculates the maximal non-overlapping <a href="https://en.wikipedia.org/wiki/Class_(set_theory)">class</a> of
  * a <a href="https://en.wikipedia.org/wiki/Family_of_sets">family</a>.
  * <p>
