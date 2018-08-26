@@ -69,13 +69,8 @@ public class OptimalGearSetup {
         candidates.forEach(equipment -> {
             Set<EquipmentSlot> occupiedSlots = equipment.getOccupiedSlots();
             Equipment previousMaximum = maximumWeightForSlot.putIfAbsent(occupiedSlots, equipment);
-            //first equipment found for slot, no need to compare the weights
-            if (previousMaximum == null) {
-                return;
-            }
-            double currentWeight = weights.get(equipment);
-            double existingWeight = weights.get(previousMaximum);
-            if (currentWeight <= existingWeight) {
+            //first equipment found for slot or the weight is less than the previous maximum
+            if (previousMaximum == null || weights.get(equipment) <= weights.get(previousMaximum)) {
                 return;
             }
             //replace maximum equipment for slot if weight is greater than the existing weight
