@@ -67,10 +67,15 @@ public class OptimalGearSetup {
         Map<Equipment, Double> weights = candidates.stream().collect(ImmutableMap.toImmutableMap(Function.identity(), weight::applyAsDouble));
         Map<Set<EquipmentSlot>, Equipment> maximumWeightForSlot = new HashMap<>();
         candidates.forEach(equipment -> {
+            double equipmentWeight = weights.get(equipment);
+            //equipment does not contribute to maximizing the weighting function, having no item would be better than this equipment
+            if (equipmentWeight <= 0) {
+                return;
+            }
             Set<EquipmentSlot> occupiedSlots = equipment.getOccupiedSlots();
             Equipment previousMaximum = maximumWeightForSlot.putIfAbsent(occupiedSlots, equipment);
             //first equipment found for slot or the weight is less than the previous maximum
-            if (previousMaximum == null || weights.get(equipment) <= weights.get(previousMaximum)) {
+            if (previousMaximum == null || equipmentWeight <= weights.get(previousMaximum)) {
                 return;
             }
             maximumWeightForSlot.put(occupiedSlots, equipment);
