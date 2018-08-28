@@ -5,9 +5,7 @@ import com.google.common.collect.ImmutableSet;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.ToDoubleFunction;
 
@@ -37,6 +35,9 @@ import java.util.function.ToDoubleFunction;
  */
 @UtilityClass
 public class OptimalGearSetup {
+    private static final Map<EquipmentSlot, Set<EquipmentSlot>> SINGLETON_SLOTS = Arrays.stream(EquipmentSlot.values())
+            .collect(ImmutableMap.toImmutableMap(Function.identity(), ImmutableSet::of));
+
     /**
      * Finds the optimal gear setup given the specified candidate {@link Equipment} and the weighting function to maximize.
      * <p>
@@ -80,8 +81,26 @@ public class OptimalGearSetup {
             }
             maximumWeightForSlots.put(occupiedSlots, equipment);
         });
+        //most multi-slot equipment provide no bonuses over their components, so to reduce overhead in MWDS, filter them out
+        Set<Equipment> considered = new HashSet<>(maximumWeightForSlots.values());
+        Iterator<Equipment> iterator = considered.iterator();
+        while (iterator.hasNext()) {
+            Equipment equipment = iterator.next();
+            Set<EquipmentSlot> slots = equipment.getOccupiedSlots();
+            if (slots.size() < 2) {
+                continue;
+            }
+            double totalIndividualEquipmentWeight = slots.stream()
+                    .mapToDouble(slot -> weights.getOrDefault(maximumWeightForSlots.get(SINGLETON_SLOTS.get(slot)), 0.0))
+                    .sum();
+            //multi-slot equipment is better than the total
+            if (totalIndividualEquipmentWeight < weights.get(equipment)) {
+                continue;
+            }
+            iterator.remove();
+        }
         //calculate all unique slot combinations and maximize those combinations
-        Set<Set<EquipmentSlot>> uniqueSlotCombinations = candidates.stream()
+        Set<Set<EquipmentSlot>> uniqueSlotCombinations = considered.stream()
                 .map(Equipment::getOccupiedSlots)
                 .collect(ImmutableSet.toImmutableSet());
         Set<Set<EquipmentSlot>> maximumDisjointSets = MaximumWeightedDisjointSet.find(
