@@ -65,7 +65,7 @@ public class OptimalGearSetup {
     public Set<Equipment> find(@NonNull Set<Equipment> candidates, @NonNull ToDoubleFunction<Equipment> weight) {
         //collect weight and maximum slot heuristics
         Map<Equipment, Double> weights = candidates.stream().collect(ImmutableMap.toImmutableMap(Function.identity(), weight::applyAsDouble));
-        Map<Set<EquipmentSlot>, Equipment> maximumWeightForSlot = new HashMap<>();
+        Map<Set<EquipmentSlot>, Equipment> maximumWeightForSlots = new HashMap<>();
         candidates.forEach(equipment -> {
             double equipmentWeight = weights.get(equipment);
             //equipment does not contribute to maximizing the weighting function, having no item would be better than this equipment
@@ -73,12 +73,12 @@ public class OptimalGearSetup {
                 return;
             }
             Set<EquipmentSlot> occupiedSlots = equipment.getOccupiedSlots();
-            Equipment previousMaximum = maximumWeightForSlot.putIfAbsent(occupiedSlots, equipment);
+            Equipment previousMaximum = maximumWeightForSlots.putIfAbsent(occupiedSlots, equipment);
             //first equipment found for slot or the weight is less than the previous maximum
             if (previousMaximum == null || equipmentWeight <= weights.get(previousMaximum)) {
                 return;
             }
-            maximumWeightForSlot.put(occupiedSlots, equipment);
+            maximumWeightForSlots.put(occupiedSlots, equipment);
         });
         //calculate all unique slot combinations and maximize those combinations
         Set<Set<EquipmentSlot>> uniqueSlotCombinations = candidates.stream()
@@ -86,11 +86,11 @@ public class OptimalGearSetup {
                 .collect(ImmutableSet.toImmutableSet());
         Set<Set<EquipmentSlot>> maximumDisjointSets = MaximumWeightedDisjointSet.find(
                 uniqueSlotCombinations,
-                slots -> weights.get(maximumWeightForSlot.get(slots))
+                slots -> weights.get(maximumWeightForSlots.get(slots))
         );
         //map maximized slot combinations back to equipment
         return maximumDisjointSets.stream()
-                .map(maximumWeightForSlot::get)
+                .map(maximumWeightForSlots::get)
                 .collect(ImmutableSet.toImmutableSet());
     }
 }
