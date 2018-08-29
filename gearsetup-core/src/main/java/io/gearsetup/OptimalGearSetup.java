@@ -5,7 +5,10 @@ import com.google.common.collect.ImmutableSet;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.ToDoubleFunction;
 
@@ -82,22 +85,25 @@ public class OptimalGearSetup {
             maximumWeightForSlots.put(occupiedSlots, equipment);
         });
         //most multi-slot equipment provide no bonuses over their components, so to reduce overhead in MWDS, filter them out
-        Set<Equipment> considered = new HashSet<>(maximumWeightForSlots.values());
-        Iterator<Equipment> iterator = considered.iterator();
-        while (iterator.hasNext()) {
-            Equipment equipment = iterator.next();
+        Set<Equipment> considered = maximumWeightForSlots.values().stream().filter(equipment -> {
             Set<EquipmentSlot> slots = equipment.getOccupiedSlots();
             if (slots.size() < 2) {
-                continue;
+                return true;
             }
             double totalIndividualEquipmentWeight = slots.stream()
                     .mapToDouble(slot -> weights.getOrDefault(maximumWeightForSlots.get(SINGLETON_SLOTS.get(slot)), 0.0))
                     .sum();
-            //multi-slot equipment is better than the total
-            if (totalIndividualEquipmentWeight < weights.get(equipment)) {
-                continue;
-            }
-            iterator.remove();
+            //multi-slot equipment is better than the total individual weight, keep the multi-slot
+            return totalIndividualEquipmentWeight < weights.get(equipment);
+        }).collect(ImmutableSet.toImmutableSet());
+        //only 0 or 1 candidates are remaining to be considered, they are optimal as there are no other options to consider
+        if (considered.size() < 2) {
+            return ImmutableSet.copyOf(considered);
+        }
+        boolean allSingleSlotItems = considered.stream().allMatch(equipment -> equipment.getOccupiedSlots().size() == 1);
+        //if all considered items are single slot items, they are guaranteed to each be the best-in-slot, so they are guaranteed to be disjoint
+        if (allSingleSlotItems) {
+            return ImmutableSet.copyOf(considered);
         }
         //calculate all unique slot combinations and maximize those combinations
         Set<Set<EquipmentSlot>> uniqueSlotCombinations = considered.stream()
