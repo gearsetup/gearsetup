@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.function.BiPredicate;
 
 /**
- * A utility class providing memory-efficient methods of filling buffers with the
+ * A utility class providing memory-efficient methods of filling a buffer with the
  * <a href="https://en.wikipedia.org/wiki/Adjacency_matrix">Adjacency matrix</a> of a collection of values.
  *
  * @author Ian Caffey
@@ -73,9 +73,8 @@ public class AdjacencyMatrix {
             int count = 0;
             for (int j = 0; j < size; j++) {
                 //i and j are adjacent if they are not the same and meet the adjacency criteria
-                boolean neighbors = i != j && criteria.test(values.get(i), values.get(j));
-                adjacencyBuffer[i][j] = neighbors;
-                if (neighbors) {
+                adjacencyBuffer[i][j] = i != j && criteria.test(values.get(i), values.get(j));
+                if (adjacencyBuffer[i][j]) {
                     count++;
                 }
             }
