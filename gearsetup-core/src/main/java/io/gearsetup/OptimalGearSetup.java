@@ -91,7 +91,7 @@ public class OptimalGearSetup {
                     .mapToDouble(slot -> weights.getOrDefault(maximumWeightForSlots.get(SINGLETON_SLOTS.get(slot)), 0.0))
                     .sum();
             //multi-slot equipment is better than the total individual weight, keep the multi-slot
-            return totalIndividualEquipmentWeight < weights.get(equipment);
+            return weights.get(equipment) > totalIndividualEquipmentWeight;
         }).collect(ImmutableSet.toImmutableSet());
         //only 0 or 1 candidates are remaining to be considered, they are optimal as there are no other options to consider
         if (considered.size() < 2) {
