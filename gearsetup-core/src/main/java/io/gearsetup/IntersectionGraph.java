@@ -122,6 +122,23 @@ public final class IntersectionGraph<T> {
     }
 
     /**
+     * Determines if the two specified vertices are neighbors in the intersection graph. A neighboring vertex is a vertex
+     * that has an edge (or intersection) with the specified vertex.
+     * <p>
+     * Intersection between vertices is decided by the intersection criteria used when constructing the {@link IntersectionGraph}.
+     * <p>
+     * Loops are not allowed within {@link IntersectionGraph}, therefore a vertex is not a neighbor with itself.
+     *
+     * @param one the first vertex
+     * @param two the second vertex
+     * @return {@code true} if the vertices are neighbors in the intersection graph
+     * @throws IllegalArgumentException indicating one of the vertices is not present in the intersection graph
+     */
+    public boolean neighbors(@NonNull T one, @NonNull T two) {
+        return one != two && adjacencyMatrix[indexOrThrow(one)][indexOrThrow(two)];
+    }
+
+    /**
      * Constructs a {@link Stream} that allows streaming the neighbor vertices of the specified vertex. A neighboring
      * vertex is a vertex that has an edge (or intersection) with the specified vertex.
      * <p>
@@ -133,6 +150,9 @@ public final class IntersectionGraph<T> {
      * <li>{@link Spliterator#IMMUTABLE}</li>
      * <li>{@link Spliterator#SUBSIZED}</li>
      * </ul>
+     * <p>
+     * It is recommended to use {@link IntersectionGraph#neighbors(Object, Object)} for checking if two vertices are
+     * neighbors as it eliminates an {@link Iterator}, {@link Spliterator}, and {@link Stream} object creation.
      * <p>
      * It is recommended to use {@link IntersectionGraph#neighborCount(Object)} for counting the number of neighbors of
      * a vertex instead of using {@code neighbors(vertex).count()} as it eliminates the unnecessary {@link Stream} object creation.
