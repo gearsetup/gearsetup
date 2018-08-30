@@ -157,7 +157,7 @@ public final class IntersectionGraph<T> {
      * It is recommended to use {@link IntersectionGraph#neighborCount(Object)} for counting the number of neighbors of
      * a vertex instead of using {@code neighbors(vertex).count()} as it eliminates the unnecessary {@link Stream} object creation.
      * <p>
-     * It is recommended to use {@link IntersectionGraph#forEachNeighbor(Object, Consumer)}} for performing a single
+     * It is recommended to use {@link IntersectionGraph#forEachNeighbor(Object, Consumer)} for performing a single
      * operation on each neighbor as it eliminates a {@link Spliterator} and {@link Stream} object creation.
      *
      * @param vertex the vertex to stream neighboring vertices
