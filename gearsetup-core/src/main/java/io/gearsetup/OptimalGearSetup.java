@@ -5,10 +5,7 @@ import com.google.common.collect.ImmutableSet;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.ToDoubleFunction;
 
@@ -105,17 +102,9 @@ public class OptimalGearSetup {
         if (allSingleSlotItems) {
             return ImmutableSet.copyOf(considered);
         }
-        //calculate all unique slot combinations and maximize those combinations
-        Set<Set<EquipmentSlot>> uniqueSlotCombinations = considered.stream()
-                .map(Equipment::getOccupiedSlots)
-                .collect(ImmutableSet.toImmutableSet());
-        Set<Set<EquipmentSlot>> maximumDisjointSets = MaximumWeightedDisjointSet.find(
-                uniqueSlotCombinations,
-                slots -> weights.get(maximumWeightForSlots.get(slots))
+        return MaximumWeightedDisjointSet.find(considered,
+                (left, right) -> !Collections.disjoint(left.getOccupiedSlots(), right.getOccupiedSlots()),
+                weights::get
         );
-        //map maximized slot combinations back to equipment
-        return maximumDisjointSets.stream()
-                .map(maximumWeightForSlots::get)
-                .collect(ImmutableSet.toImmutableSet());
     }
 }
