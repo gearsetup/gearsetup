@@ -22,6 +22,16 @@ import org.immutables.value.Value.Immutable;
 @Gson.TypeAdapters
 @ImmutableGearSetupStyle
 public interface SkillRequirement extends EquipmentRequirement {
+    //Immutables builder stub to hide immutable class dependency
+    static Builder builder() {
+        return ImmutableSkillRequirement.builder();
+    }
+
+    //Immutables factory stub to hide immutable class dependency
+    static SkillRequirement of(Skill skill, int level) {
+        return ImmutableSkillRequirement.of(skill, level);
+    }
+
     /**
      * Represents the {@link Skill} in which the character level must meet or exceed {@link SkillRequirement#getLevel()}.
      *
@@ -49,5 +59,14 @@ public interface SkillRequirement extends EquipmentRequirement {
     @Override
     default <T> T accept(EquipmentRequirementVisitor<T> visitor) {
         return visitor.visit(this);
+    }
+
+    //Immutables builder stub to hide immutable class dependency
+    interface Builder {
+        Builder setSkill(Skill skill);
+
+        Builder setLevel(int level);
+
+        SkillRequirement build();
     }
 }

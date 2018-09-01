@@ -22,6 +22,39 @@ import java.util.Set;
 @Gson.TypeAdapters
 @ImmutableGearSetupStyle
 public interface Equipment {
+    //Immutables builder stub to hide immutable class dependency
+    static Builder builder() {
+        return ImmutableEquipment.builder();
+    }
+
+    //Immutables factory stub to hide immutable class dependency
+    static Equipment of(int id, String name, Iterable<EquipmentSlot> occupiedSlots, CombatBonuses combatBonuses,
+                        AttackSpeed attackSpeed, Iterable<? extends EquipmentRequirement> requirements,
+                        double weight) {
+        return ImmutableEquipment.of(id, name, occupiedSlots, combatBonuses, Optional.ofNullable(attackSpeed), requirements, weight);
+    }
+
+    //Immutables factory stub to hide immutable class dependency
+    static Equipment of(int id, String name, Set<EquipmentSlot> occupiedSlots, CombatBonuses combatBonuses,
+                        AttackSpeed attackSpeed, Set<? extends EquipmentRequirement> requirements,
+                        double weight) {
+        return ImmutableEquipment.of(id, name, occupiedSlots, combatBonuses, Optional.ofNullable(attackSpeed), requirements, weight);
+    }
+
+    //Immutables factory stub to hide immutable class dependency
+    static Equipment of(int id, String name, Iterable<EquipmentSlot> occupiedSlots, CombatBonuses combatBonuses,
+                        Optional<? extends AttackSpeed> attackSpeed, Iterable<? extends EquipmentRequirement> requirements,
+                        double weight) {
+        return ImmutableEquipment.of(id, name, occupiedSlots, combatBonuses, attackSpeed, requirements, weight);
+    }
+
+    //Immutables factory stub to hide immutable class dependency
+    static Equipment of(int id, String name, Set<EquipmentSlot> occupiedSlots, CombatBonuses combatBonuses,
+                        Optional<? extends AttackSpeed> attackSpeed, Set<? extends EquipmentRequirement> requirements,
+                        double weight) {
+        return ImmutableEquipment.of(id, name, occupiedSlots, combatBonuses, attackSpeed, requirements, weight);
+    }
+
     /**
      * Represents the unique identifier for the <a href="http://oldschoolrunescape.wikia.com/wiki/Items">equipment</a>.
      *
@@ -79,4 +112,37 @@ public interface Equipment {
      * @return the equipment weight in kg
      */
     double getWeight();
+
+    //Immutables builder stub to hide immutable class dependency
+    interface Builder {
+        Builder setId(int id);
+
+        Builder setName(String name);
+
+        Builder addOccupiedSlot(EquipmentSlot slot);
+
+        Builder addOccupiedSlots(EquipmentSlot... slots);
+
+        Builder setOccupiedSlots(Iterable<EquipmentSlot> slots);
+
+        Builder addAllOccupiedSlots(Iterable<EquipmentSlot> slots);
+
+        Builder setCombatBonuses(CombatBonuses combatBonuses);
+
+        Builder setAttackSpeed(AttackSpeed attackSpeed);
+
+        Builder setAttackSpeed(Optional<? extends AttackSpeed> attackSpeed);
+
+        Builder addRequirement(EquipmentRequirement requirement);
+
+        Builder addRequirements(EquipmentRequirement... requirements);
+
+        Builder setRequirements(Iterable<? extends EquipmentRequirement> requirements);
+
+        Builder addAllRequirements(Iterable<? extends EquipmentRequirement> elements);
+
+        Builder setWeight(double weight);
+
+        Equipment build();
+    }
 }

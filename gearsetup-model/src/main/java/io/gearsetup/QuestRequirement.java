@@ -21,6 +21,16 @@ import org.immutables.value.Value.Immutable;
 @Gson.TypeAdapters
 @ImmutableGearSetupStyle
 public interface QuestRequirement extends EquipmentRequirement {
+    //Immutables builder stub to hide immutable class dependency
+    static Builder builder() {
+        return ImmutableQuestRequirement.builder();
+    }
+
+    //Immutables factory stub to hide immutable class dependency
+    static QuestRequirement of(String questName) {
+        return ImmutableQuestRequirement.of(questName);
+    }
+
     /**
      * Represents the name of the <a href="http://oldschoolrunescape.wikia.com/wiki/Quests">quest</a> required to be
      * completed for an item to be equipped.
@@ -42,5 +52,12 @@ public interface QuestRequirement extends EquipmentRequirement {
     @Override
     default <T> T accept(EquipmentRequirementVisitor<T> visitor) {
         return visitor.visit(this);
+    }
+
+    //Immutables builder stub to hide immutable class dependency
+    interface Builder {
+        Builder setQuestName(String questName);
+
+        QuestRequirement build();
     }
 }

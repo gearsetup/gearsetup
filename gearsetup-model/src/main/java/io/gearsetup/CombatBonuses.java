@@ -22,6 +22,17 @@ import org.immutables.value.Value.Immutable;
 @Gson.TypeAdapters
 @ImmutableGearSetupStyle
 public interface CombatBonuses {
+    //Immutables builder stub to hide immutable class dependency
+    static Builder builder() {
+        return ImmutableCombatBonuses.builder();
+    }
+
+    //Immutables factory stub to hide immutable class dependency
+    static CombatBonuses of(AttackTypeBonuses attackBonuses, AttackTypeBonuses defenceBonuses,
+                            int prayerBonus, int meleeStrength, int rangedStrength, int magicStrength) {
+        return ImmutableCombatBonuses.of(attackBonuses, defenceBonuses, prayerBonus, meleeStrength, rangedStrength, magicStrength);
+    }
+
     /**
      * Represents the offensive combat bonuses used in the calculations for damage likelihood between two characters.
      * <p>
@@ -74,4 +85,21 @@ public interface CombatBonuses {
      * @return the magic strength bonus affecting spell maximum damage
      */
     int getMagicStrength();
+
+    //Immutables builder stub to hide immutable class dependency
+    interface Builder {
+        Builder setAttackBonuses(AttackTypeBonuses bonuses);
+
+        Builder setDefenceBonuses(AttackTypeBonuses bonuses);
+
+        Builder setPrayerBonus(int bonus);
+
+        Builder setMeleeStrength(int bonus);
+
+        Builder setRangedStrength(int bonus);
+
+        Builder setMagicStrength(int bonus);
+
+        CombatBonuses build();
+    }
 }

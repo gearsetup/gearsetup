@@ -1,5 +1,6 @@
 package io.gearsetup;
 
+import com.google.common.collect.ImmutableMap;
 import io.gearsetup.immutables.ImmutableGearSetupStyle;
 import org.immutables.gson.Gson;
 import org.immutables.value.Value.Immutable;
@@ -24,6 +25,21 @@ import java.util.Map;
 @Gson.TypeAdapters
 @ImmutableGearSetupStyle
 public interface TypeDependentAttackSpeed extends AttackSpeed {
+    //Immutables builder stub to hide immutable class dependency
+    static Builder builder() {
+        return ImmutableTypeDependentAttackSpeed.builder();
+    }
+
+    //Immutables factory stub to hide immutable class dependency
+    static TypeDependentAttackSpeed of(AttackType type, AttackSpeed speed) {
+        return ImmutableTypeDependentAttackSpeed.of(ImmutableMap.of(type, speed));
+    }
+
+    //Immutables factory stub to hide immutable class dependency
+    static TypeDependentAttackSpeed of(Map<AttackType, ? extends AttackSpeed> speeds) {
+        return ImmutableTypeDependentAttackSpeed.of(speeds);
+    }
+
     /**
      * Represents the varying {@link AttackSpeed} for each {@link AttackType}.
      * <p>
@@ -47,5 +63,18 @@ public interface TypeDependentAttackSpeed extends AttackSpeed {
     @Override
     default <T> T accept(AttackSpeedVisitor<T> visitor) {
         return visitor.visit(this);
+    }
+
+    //Immutables builder stub to hide immutable class dependency
+    interface Builder {
+        Builder putAttackSpeed(AttackType type, AttackSpeed speed);
+
+        Builder putAttackSpeed(Map.Entry<AttackType, ? extends AttackSpeed> entry);
+
+        Builder setAttackSpeeds(Map<AttackType, ? extends AttackSpeed> entries);
+
+        Builder putAllAttackSpeeds(Map<AttackType, ? extends AttackSpeed> entries);
+
+        TypeDependentAttackSpeed build();
     }
 }

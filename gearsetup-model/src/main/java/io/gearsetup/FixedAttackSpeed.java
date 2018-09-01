@@ -19,6 +19,16 @@ import org.immutables.value.Value.Immutable;
 @Gson.TypeAdapters
 @ImmutableGearSetupStyle
 public interface FixedAttackSpeed extends AttackSpeed {
+    //Immutables builder stub to hide immutable class dependency
+    static Builder builder() {
+        return ImmutableFixedAttackSpeed.builder();
+    }
+
+    //Immutables factory stub to hide immutable class dependency
+    static FixedAttackSpeed of(int speed) {
+        return ImmutableFixedAttackSpeed.of(speed);
+    }
+
     /**
      * Represents the fixed rate of speed of attacking during combat.
      *
@@ -50,5 +60,12 @@ public interface FixedAttackSpeed extends AttackSpeed {
     @Override
     default <T> T accept(AttackSpeedVisitor<T> visitor) {
         return visitor.visit(this);
+    }
+
+    //Immutables builder stub to hide immutable class dependency
+    interface Builder {
+        Builder setSpeed(int speed);
+
+        FixedAttackSpeed build();
     }
 }

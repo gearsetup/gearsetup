@@ -20,6 +20,16 @@ import org.immutables.value.Value.Immutable;
 @Gson.TypeAdapters
 @ImmutableGearSetupStyle
 public interface TargetDependentAttackSpeed extends AttackSpeed {
+    //Immutables builder stub to hide immutable class dependency
+    static Builder builder() {
+        return ImmutableTargetDependentAttackSpeed.builder();
+    }
+
+    //Immutables factory stub to hide immutable class dependency
+    static TargetDependentAttackSpeed of(AttackSpeed playerAttackSpeed, AttackSpeed monsterAttackSpeed) {
+        return ImmutableTargetDependentAttackSpeed.of(playerAttackSpeed, monsterAttackSpeed);
+    }
+
     /**
      * Represents the {@link AttackSpeed} used when in combat with another player.
      *
@@ -47,5 +57,14 @@ public interface TargetDependentAttackSpeed extends AttackSpeed {
     @Override
     default <T> T accept(AttackSpeedVisitor<T> visitor) {
         return visitor.visit(this);
+    }
+
+    //Immutables builder stub to hide immutable class dependency
+    interface Builder {
+        Builder setPlayerAttackSpeed(AttackSpeed attackSpeed);
+
+        Builder setMonsterAttackSpeed(AttackSpeed attackSpeed);
+
+        TargetDependentAttackSpeed build();
     }
 }

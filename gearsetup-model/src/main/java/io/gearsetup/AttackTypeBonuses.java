@@ -22,6 +22,16 @@ import org.immutables.value.Value.Immutable;
 @Gson.TypeAdapters
 @ImmutableGearSetupStyle
 public interface AttackTypeBonuses {
+    //Immutables builder stub to hide immutable class dependency
+    static Builder builder() {
+        return ImmutableAttackTypeBonuses.builder();
+    }
+
+    //Immutables factory stub to hide immutable class dependency
+    static AttackTypeBonuses of(int stabBonus, int slashBonus, int crushBonus, int magicBonus, int rangedBonus) {
+        return ImmutableAttackTypeBonuses.of(stabBonus, slashBonus, crushBonus, magicBonus, rangedBonus);
+    }
+
     /**
      * Represents the equipment combat bonus when using {@link AttackType#STAB} in combat.
      * <p>
@@ -71,4 +81,19 @@ public interface AttackTypeBonuses {
      * @return the equipment ranged bonus
      */
     int getRangedBonus();
+
+    //Immutables builder stub to hide immutable class dependency
+    interface Builder {
+        Builder setStabBonus(int bonus);
+
+        Builder setSlashBonus(int bonus);
+
+        Builder setCrushBonus(int bonus);
+
+        Builder setMagicBonus(int bonus);
+
+        Builder setRangedBonus(int bonus);
+
+        AttackTypeBonuses build();
+    }
 }
