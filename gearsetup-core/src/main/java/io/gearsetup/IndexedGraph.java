@@ -22,7 +22,7 @@ import java.util.stream.Stream;
  * @author Ian Caffey
  * @since 1.0
  */
-public final class Graph<T> {
+public final class IndexedGraph<T> {
     @Getter
     private final Set<T> vertices;
     @Getter
@@ -32,12 +32,12 @@ public final class Graph<T> {
     private final BiMap<T, Integer> indices;
 
     /**
-     * Constructs a new {@link Graph} of the specified values using the specified edge predicate for building the graph edges.
+     * Constructs a new {@link IndexedGraph} of the specified values using the specified edge predicate for building the graph edges.
      *
      * @param vertices      the vertices of the graph
      * @param edgePredicate the edge predicate for determine if two vertices have an edge
      */
-    private Graph(@NonNull Set<T> vertices, @NonNull BiPredicate<T, T> edgePredicate) {
+    private IndexedGraph(@NonNull Set<T> vertices, @NonNull BiPredicate<T, T> edgePredicate) {
         int size = vertices.size();
         int[] neighborCounts = new int[size];
         int[][] adjacencyList = new int[size][size];
@@ -63,15 +63,15 @@ public final class Graph<T> {
     }
 
     /**
-     * Constructs a new {@link Graph} of the specified values using the specified edge predicate for building the graph.
+     * Constructs a new {@link IndexedGraph} of the specified values using the specified edge predicate for building the graph.
      *
      * @param vertices the values to use when building the graph
      * @param criteria the edge predicate for determine if two vertices have an edge
      * @param <T>      the type of the vertices in the graph
-     * @return a new {@link Graph} represented by the vertices and edge predicate
+     * @return a new {@link IndexedGraph} represented by the vertices and edge predicate
      */
-    public static <T> Graph<T> of(Set<T> vertices, BiPredicate<T, T> criteria) {
-        return new Graph<>(vertices, criteria);
+    public static <T> IndexedGraph<T> of(Set<T> vertices, BiPredicate<T, T> criteria) {
+        return new IndexedGraph<>(vertices, criteria);
     }
 
     /**
@@ -87,9 +87,9 @@ public final class Graph<T> {
     /**
      * Returns the total number of vertices that intersect the specified vertex.
      * <p>
-     * Edges between vertices are decided by the edge predicate used when constructing the {@link Graph}.
+     * Edges between vertices are decided by the edge predicate used when constructing the {@link IndexedGraph}.
      * <p>
-     * Loops are not allowed within {@link Graph}, therefore it is possible for a vertex to have a neighbor
+     * Loops are not allowed within {@link IndexedGraph}, therefore it is possible for a vertex to have a neighbor
      * count of {@code 0}.
      *
      * @param vertex the vertex to find total intersecting vertices
@@ -104,9 +104,9 @@ public final class Graph<T> {
      * Determines if the two specified vertices are neighbors in the graph. A neighboring vertex is a vertex
      * that has an edge with the specified vertex.
      * <p>
-     * Edges between vertices are decided by the edge predicate used when constructing the {@link Graph}.
+     * Edges between vertices are decided by the edge predicate used when constructing the {@link IndexedGraph}.
      * <p>
-     * Loops are not allowed within {@link Graph}, therefore a vertex is not a neighbor with itself.
+     * Loops are not allowed within {@link IndexedGraph}, therefore a vertex is not a neighbor with itself.
      *
      * @param one the first vertex
      * @param two the second vertex
@@ -131,7 +131,7 @@ public final class Graph<T> {
     /**
      * Finds the vertex of the specified index in the graph.
      * <p>
-     * The ordering of vertices is determined by the {@link Set} of values when constructing the {@link Graph}.
+     * The ordering of vertices is determined by the {@link Set} of values when constructing the {@link IndexedGraph}.
      *
      * @param index the index of the vertex to find
      * @return the vertex at the specified index in the graph
@@ -148,7 +148,7 @@ public final class Graph<T> {
     /**
      * Finds the index of the specified vertex in the graph.
      * <p>
-     * The ordering of vertices is determined by the {@link Set} of values when constructing the {@link Graph}.
+     * The ordering of vertices is determined by the {@link Set} of values when constructing the {@link IndexedGraph}.
      *
      * @param vertex the vertex to find
      * @return the index of the vertex in the graph
@@ -175,13 +175,13 @@ public final class Graph<T> {
      * <li>{@link Spliterator#SUBSIZED}</li>
      * </ul>
      * <p>
-     * It is recommended to use {@link Graph#neighbors(Object, Object)} for checking if two vertices are
+     * It is recommended to use {@link IndexedGraph#neighbors(Object, Object)} for checking if two vertices are
      * neighbors as it eliminates an {@link Iterator}, {@link Spliterator}, and {@link Stream} object creation.
      * <p>
-     * It is recommended to use {@link Graph#neighborCount(Object)} for counting the number of neighbors of
+     * It is recommended to use {@link IndexedGraph#neighborCount(Object)} for counting the number of neighbors of
      * a vertex instead of using {@code neighbors(vertex).count()} as it eliminates the unnecessary {@link Stream} object creation.
      * <p>
-     * It is recommended to use {@link Graph#forEachNeighbor(Object, Consumer)} for performing a single
+     * It is recommended to use {@link IndexedGraph#forEachNeighbor(Object, Consumer)} for performing a single
      * operation on each neighbor as it eliminates a {@link Spliterator} and {@link Stream} object creation.
      *
      * @param vertex the vertex to stream neighboring vertices
@@ -200,7 +200,7 @@ public final class Graph<T> {
      * @param vertex   the vertex whose neighbors to find
      * @param consumer the function to apply to each neighbor of the vertex
      * @throws IllegalArgumentException indicating the vertex is not present in the graph
-     * @see Graph#indexOf(Object)
+     * @see IndexedGraph#indexOf(Object)
      */
     public void forEachNeighbor(@NonNull T vertex, Consumer<T> consumer) {
         int index = indexOf(vertex);
@@ -225,7 +225,7 @@ public final class Graph<T> {
      * lazily, so it is advised to limit the number of repeated iterations over the components.
      *
      * @param consumer the function to apply to each connected component of the graph
-     * @see Graph#componentIterator()
+     * @see IndexedGraph#componentIterator()
      */
     public void forEachComponent(Consumer<Set<T>> consumer) {
         componentIterator().forEachRemaining(consumer);
