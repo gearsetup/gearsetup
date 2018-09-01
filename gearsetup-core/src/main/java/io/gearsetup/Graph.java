@@ -14,92 +14,44 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 /**
- * A representation of an <a href="https://en.wikipedia.org/wiki/Intersection_graph">Intersection graph</a> that represents
- * the intersections between a set of objects.
+ * An implementation of a <a href="https://en.wikipedia.org/wiki/Graph_(abstract_data_type)">Graph</a> that
+ * consists of a set of vertices and an edge predicate.
  * <p>
- * {@link IntersectionGraph} provides a more generic interface than the typical
- * <a href="https://en.wikipedia.org/wiki/Intersection_graph">Intersection graph</a> by allowing for arbitrary intersection
- * criteria to be used when building the graph.
+ * An edge predicate is a {@link BiPredicate} that takes in two vertices and returns {@code true} if there is an edge
+ * between the vertices.
  *
- * @param <T> the type of the vertices in the intersection graph
+ * @param <T> the type of the vertices in the graph
  * @author Ian Caffey
  * @since 1.0
  */
-public final class IntersectionGraph<T> {
+public final class Graph<T> {
     private final List<T> vertices;
     private final int[] neighborCount;
     private final boolean[][] adjacencyMatrix;
     private final Map<T, Integer> indices;
 
     /**
-     * Constructs a new {@link IntersectionGraph} of the specified values using the specified intersection criteria for
-     * building the graph.
+     * Constructs a new {@link Graph} of the specified values using the specified edge predicate for building the graph edges.
      *
-     * @param values   the values to use when building the intersection graph
-     * @param criteria the criteria predicate for determine if two values intersect
+     * @param vertices the vertices of the graph
+     * @param criteria the edge predicate for determine if two vertices have an edge
      */
-    private IntersectionGraph(@NonNull Set<T> values, @NonNull BiPredicate<T, T> criteria) {
-        int size = values.size();
-        this.vertices = ImmutableList.copyOf(values);
-        this.indices = IntStream.range(0, size).boxed().collect(ImmutableMap.toImmutableMap(vertices::get, Function.identity()));
+    public Graph(@NonNull Set<T> vertices, @NonNull BiPredicate<T, T> criteria) {
+        int size = vertices.size();
+        this.vertices = ImmutableList.copyOf(vertices);
+        this.indices = IntStream.range(0, size).boxed().collect(ImmutableMap.toImmutableMap(this.vertices::get, Function.identity()));
         int[] neighborCount = new int[size];
         boolean[][] adjacencyMatrix = new boolean[size][size];
-        AdjacencyMatrix.fillWithCounts(vertices, criteria, adjacencyMatrix, neighborCount);
+        AdjacencyMatrix.fillWithCounts(this.vertices, criteria, adjacencyMatrix, neighborCount);
         this.neighborCount = neighborCount;
         this.adjacencyMatrix = adjacencyMatrix;
     }
 
     /**
-     * Constructs a new {@link IntersectionGraph} of the specified values using {@link Collection} intersection as the
-     * criteria when building the graph.
-     * <p>
-     * Two {@link Collection} can be checked for intersection by using {@link Collections#disjoint(Collection, Collection)}
-     * and negating the result.
+     * Returns whether the specified vertex is present within the graph.
      *
-     * @param values the values to use when building the intersection graph
-     * @param <T>    the type of the vertices in the intersection graph
-     * @return a new {@link IntersectionGraph} representing the intersections amongst the specified values
-     */
-    public static <T extends Collection<?>> IntersectionGraph<T> of(@NonNull Set<T> values) {
-        return new IntersectionGraph<>(values, (left, right) -> !Collections.disjoint(left, right));
-    }
-
-    /**
-     * Constructs a new {@link IntersectionGraph} of the specified values using a transformation function to map the
-     * value type to a {@link Collection} which can be used for checking intersection as the criteria when building the graph.
-     * <p>
-     * Two {@link Collection} can be checked for intersection by using {@link Collections#disjoint(Collection, Collection)}
-     * and negating the result.
-     *
-     * @param values    the values to use when building the intersection graph
-     * @param transform the transformation function to a collection which will be used when checking collection intersection
-     * @param <T>       the type of the vertices in the intersection graph
-     * @return a new {@link IntersectionGraph} representing the intersections amongst the specified values
-     */
-    public static <T> IntersectionGraph<T> of(@NonNull Set<T> values, @NonNull Function<T, ? extends Collection<?>> transform) {
-        return new IntersectionGraph<>(values, (left, right) -> !Collections.disjoint(transform.apply(left), transform.apply(right)));
-    }
-
-    /**
-     * Constructs a new {@link IntersectionGraph} of the specified values using the specified intersection criteria for
-     * building the graph.
-     *
-     * @param values   the values to use when building the intersection graph
-     * @param criteria the criteria predicate for determine if two values intersect
-     * @param <T>      the type of the vertices in the intersection graph
-     * @return a new {@link IntersectionGraph} representing the intersections amongst the specified values
-     */
-    public static <T> IntersectionGraph<T> of(Set<T> values, BiPredicate<T, T> criteria) {
-        return new IntersectionGraph<>(values, criteria);
-    }
-
-    /**
-     * Returns whether the specified vertex is present within the intersection graph.
-     * <p>
-     * For a vertex to be present in the intersection graph, it would have to be passed in by the constructor/factory method.
-     *
-     * @param vertex the vertex to look for in the intersection graph
-     * @return {@code true} if the vertex is present in the intersection graph
+     * @param vertex the vertex to look for in the graph
+     * @return {@code true} if the vertex is present in the graph
      */
     public boolean contains(@NonNull T vertex) {
         return indices.containsKey(vertex);
@@ -108,31 +60,31 @@ public final class IntersectionGraph<T> {
     /**
      * Returns the total number of vertices that intersect the specified vertex.
      * <p>
-     * Intersection between vertices is decided by the intersection criteria used when constructing the {@link IntersectionGraph}.
+     * Edges between vertices are decided by the edge predicate used when constructing the {@link Graph}.
      * <p>
-     * Loops are not allowed within {@link IntersectionGraph}, therefore it is possible for a vertex to have a neighbor
+     * Loops are not allowed within {@link Graph}, therefore it is possible for a vertex to have a neighbor
      * count of {@code 0}.
      *
      * @param vertex the vertex to find total intersecting vertices
-     * @return the count of vertices in the intersection graph that intersect the specified vertex
-     * @throws IllegalArgumentException indicating the vertex is not present in the intersection graph
+     * @return the count of vertices in the graph that have edges with the specified vertex
+     * @throws IllegalArgumentException indicating the vertex is not present in the graph
      */
     public int neighborCount(@NonNull T vertex) {
         return neighborCount[indexOrThrow(vertex)];
     }
 
     /**
-     * Determines if the two specified vertices are neighbors in the intersection graph. A neighboring vertex is a vertex
-     * that has an edge (or intersection) with the specified vertex.
+     * Determines if the two specified vertices are neighbors in the graph. A neighboring vertex is a vertex
+     * that has an edge with the specified vertex.
      * <p>
-     * Intersection between vertices is decided by the intersection criteria used when constructing the {@link IntersectionGraph}.
+     * Edges between vertices are decided by the edge predicate used when constructing the {@link Graph}.
      * <p>
-     * Loops are not allowed within {@link IntersectionGraph}, therefore a vertex is not a neighbor with itself.
+     * Loops are not allowed within {@link Graph}, therefore a vertex is not a neighbor with itself.
      *
      * @param one the first vertex
      * @param two the second vertex
-     * @return {@code true} if the vertices are neighbors in the intersection graph
-     * @throws IllegalArgumentException indicating one of the vertices is not present in the intersection graph
+     * @return {@code true} if the vertices are neighbors in the graph
+     * @throws IllegalArgumentException indicating one of the vertices is not present in the graph
      */
     public boolean neighbors(@NonNull T one, @NonNull T two) {
         return one != two && adjacencyMatrix[indexOrThrow(one)][indexOrThrow(two)];
@@ -140,7 +92,7 @@ public final class IntersectionGraph<T> {
 
     /**
      * Constructs a {@link Stream} that allows streaming the neighbor vertices of the specified vertex. A neighboring
-     * vertex is a vertex that has an edge (or intersection) with the specified vertex.
+     * vertex is a vertex that has an edge with the specified vertex.
      * <p>
      * The {@link Stream} has the following characteristics:
      * <ul>
@@ -151,19 +103,19 @@ public final class IntersectionGraph<T> {
      * <li>{@link Spliterator#SUBSIZED}</li>
      * </ul>
      * <p>
-     * It is recommended to use {@link IntersectionGraph#neighbors(Object, Object)} for checking if two vertices are
+     * It is recommended to use {@link Graph#neighbors(Object, Object)} for checking if two vertices are
      * neighbors as it eliminates an {@link Iterator}, {@link Spliterator}, and {@link Stream} object creation.
      * <p>
-     * It is recommended to use {@link IntersectionGraph#neighborCount(Object)} for counting the number of neighbors of
+     * It is recommended to use {@link Graph#neighborCount(Object)} for counting the number of neighbors of
      * a vertex instead of using {@code neighbors(vertex).count()} as it eliminates the unnecessary {@link Stream} object creation.
      * <p>
-     * It is recommended to use {@link IntersectionGraph#forEachNeighbor(Object, Consumer)} for performing a single
+     * It is recommended to use {@link Graph#forEachNeighbor(Object, Consumer)} for performing a single
      * operation on each neighbor as it eliminates a {@link Spliterator} and {@link Stream} object creation.
      *
      * @param vertex the vertex to stream neighboring vertices
      * @return a {@link Stream} of the vertices which intersect the specified vertex
-     * @throws IllegalArgumentException indicating the vertex is not present in the intersection graph
-     * @see IntersectionGraph#neighborIterator(int)
+     * @throws IllegalArgumentException indicating the vertex is not present in the graph
+     * @see Graph#neighborIterator(int)
      */
     public Stream<T> neighbors(@NonNull T vertex) {
         int index = indexOrThrow(vertex);
@@ -173,16 +125,16 @@ public final class IntersectionGraph<T> {
 
     /**
      * Applies the specified {@link Consumer} to each neighboring vertex of the specified vertex. A neighboring
-     * vertex is a vertex that has an edge (or intersection) with the specified vertex.
+     * vertex is a vertex that has an edge with the specified vertex.
      * <p>
      * The {@link Iterator} internally used when applying the function finds the neighboring vertices of
      * the vertex lazily, so it is advised to limit the number of repeated iterations over the neighboring vertices.
      *
      * @param vertex   the vertex whose neighbors to find
      * @param consumer the function to apply to each neighbor of the vertex
-     * @throws IllegalArgumentException indicating the vertex is not present in the intersection graph
-     * @see IntersectionGraph#indexOrThrow(Object)
-     * @see IntersectionGraph#neighborIterator(int)
+     * @throws IllegalArgumentException indicating the vertex is not present in the graph
+     * @see Graph#indexOrThrow(Object)
+     * @see Graph#neighborIterator(int)
      */
     public void forEachNeighbor(@NonNull T vertex, Consumer<T> consumer) {
         neighborIterator(indexOrThrow(vertex)).forEachRemaining(consumer);
@@ -203,8 +155,8 @@ public final class IntersectionGraph<T> {
      * <a href="https://en.wikipedia.org/wiki/Connected_component_(graph_theory)">connected components</a> of the graph
      * lazily, so it is advised to limit the number of repeated iterations over the components.
      *
-     * @param consumer the function to apply to each connected component of the intersection graph
-     * @see IntersectionGraph#componentIterator()
+     * @param consumer the function to apply to each connected component of the graph
+     * @see Graph#componentIterator()
      */
     public void forEachComponent(Consumer<Set<T>> consumer) {
         componentIterator().forEachRemaining(consumer);
@@ -225,7 +177,7 @@ public final class IntersectionGraph<T> {
      * <a href="https://en.wikipedia.org/wiki/Connected_component_(graph_theory)">connected components</a> of the graph
      * lazily, so it is advised to limit the number of repeated iterations over the components.
      *
-     * @return an {@link Iterator} that produces each connected component of the intersection graph
+     * @return an {@link Iterator} that produces each connected component of the graph
      */
     private Iterator<Set<T>> componentIterator() {
         return new Iterator<Set<T>>() {
@@ -309,18 +261,18 @@ public final class IntersectionGraph<T> {
 
     /**
      * Constructs an {@link Iterator} that iterates over each neighboring vertex of the vertex at the specified index.
-     * A neighboring vertex is a vertex that has an edge (or intersection) with the specified vertex.
+     * A neighboring vertex is a vertex that has an edge with the specified vertex.
      * <p>
      * The {@link Iterator} produces the neighboring vertices of specified the vertex lazily, so it is advised to
      * limit the number of repeated iterations over the neighboring vertices.
      *
-     * @return an {@link Iterator} that produces each connected component of the intersection graph
-     * @throws IllegalArgumentException indicating the vertex is not valid for the intersection graph
+     * @return an {@link Iterator} that produces each connected component of the graph
+     * @throws IllegalArgumentException indicating the vertex is not valid for the graph
      */
     private Iterator<T> neighborIterator(int index) {
         int size = vertices.size();
         if (index < 0 || index >= size) {
-            throw new IllegalArgumentException(index + " is not a valid index for an intersection graph with " + size + " vertices.");
+            throw new IllegalArgumentException(index + " is not a valid index for a graph with " + size + " vertices.");
         }
         return new Iterator<T>() {
             private final boolean[] potentialNeighbors = adjacencyMatrix[index];
@@ -332,7 +284,7 @@ public final class IntersectionGraph<T> {
              *
              * Neighboring vertices are guaranteed to be found in ascending index order.
              * <p>
-             * The ordering of vertices is determined by the {@link Set} of values when constructing the {@link IntersectionGraph}.
+             * The ordering of vertices is determined by the {@link Set} of values when constructing the {@link Graph}.
              *
              * @return {@code true} if there
              */
@@ -349,7 +301,7 @@ public final class IntersectionGraph<T> {
              *
              * Neighboring vertices are guaranteed to be found in ascending index order.
              * <p>
-             * The ordering of vertices is determined by the {@link Set} of values when constructing the {@link IntersectionGraph}.
+             * The ordering of vertices is determined by the {@link Set} of values when constructing the {@link Graph}.
              *
              * @return {@code true} if there was a neighbor already found or one remaining for the vertex
              * @throws NoSuchElementException if there does not exist another neighbor the vertex
@@ -379,16 +331,16 @@ public final class IntersectionGraph<T> {
     /**
      * Finds the index of the specified vertex in the graph.
      * <p>
-     * The ordering of vertices is determined by the {@link Set} of values when constructing the {@link IntersectionGraph}.
+     * The ordering of vertices is determined by the {@link Set} of values when constructing the {@link Graph}.
      *
      * @param vertex the vertex to find
      * @return the index of the vertex in the graph
-     * @throws IllegalArgumentException indicating the vertex is not present in the intersection graph
+     * @throws IllegalArgumentException indicating the vertex is not present in the graph
      */
     private int indexOrThrow(@NonNull T vertex) {
         Integer index = indices.get(vertex);
         if (index == null) {
-            throw new IllegalArgumentException(vertex + " could not be found in the intersection graph.");
+            throw new IllegalArgumentException(vertex + " could not be found in the graph.");
         }
         return index;
     }
