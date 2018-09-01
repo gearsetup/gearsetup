@@ -62,14 +62,14 @@ public class RecursiveMaximumWeightIndependentSet {
         int size = vertices.size();
         //buffers for the recursive maximum-weight independent set algorithm
         int[] selected = new int[size];
-        int[] maxPath = new int[size];
-        double[] maxPathWeight = new double[1];
-        int[] maxPathLength = new int[1];
-        fill(values, criteria, weight, selected, 0, 0, maxPath, maxPathLength, maxPathWeight);
-        //maxPath[0, maxPathLength[0]] is the maximum-weight independent set
+        int[] maximum = new int[size];
+        double[] maximumWeight = new double[1];
+        int[] maximumSize = new int[1];
+        fill(values, criteria, weight, selected, 0, 0, maximum, maximumSize, maximumWeight);
+        //maximum[0, maximumSize[0]] is the maximum-weight independent set
         ImmutableSet.Builder<T> builder = ImmutableSet.builder();
-        for (int i = 0; i < maxPathLength[0]; i++) {
-            builder.add(values.get(maxPath[i]));
+        for (int i = 0; i < maximumSize[0]; i++) {
+            builder.add(values.get(maximum[i]));
         }
         return builder.build();
     }
@@ -84,33 +84,33 @@ public class RecursiveMaximumWeightIndependentSet {
      * @param selected      the buffer for the currently selected vertices in the graph
      * @param selectedCount the length of the sub-array in the selected buffer
      * @param depth         the current depth of the combination binary tree
-     * @param maxPath       the buffer for the maximum-weight path across independent vertices
-     * @param maxPathLength the buffer to hold the sub-array length of the maximum-weight path buffer
-     * @param maxPathWeight the buffer to hold the weight of the maximum-weight path
+     * @param maximum       the buffer for the maximum-weight independent set
+     * @param maximumSize   the buffer to hold the size of the maximum-weight independent set
+     * @param maximumWeight the buffer to hold the weight of the maximum-weight independent set
      * @param <T>           the type of value being used for finding maximum-weight independent set
      */
     private <T> void fill(@NonNull List<T> vertices, @NonNull BiPredicate<T, T> criteria, @NonNull ToDoubleFunction<T> weight,
                           int[] selected, int selectedCount, int depth,
-                          @NonNull int[] maxPath, @NonNull int[] maxPathLength, @NonNull double[] maxPathWeight) {
+                          @NonNull int[] maximum, @NonNull int[] maximumSize, @NonNull double[] maximumWeight) {
         //traverse tree until recursive call reaches leaf node
         if (depth < vertices.size()) {
-            boolean disjoint = true;
+            boolean independent = true;
             T current = vertices.get(depth);
             for (int i = 0; i < selectedCount; i++) {
                 if (criteria.test(current, vertices.get(selected[i]))) {
-                    disjoint = false;
+                    independent = false;
                     break;
                 }
             }
-            if (disjoint) {
+            if (independent) {
                 selected[selectedCount++] = depth;
                 //continue looking for a maximum independent set which contains the current vertex
-                fill(vertices, criteria, weight, selected, selectedCount, depth + 1, maxPath, maxPathLength, maxPathWeight);
-                //discard current vertex from selection, to allow finding maximum disjoint sets that do not contain the current vertex
+                fill(vertices, criteria, weight, selected, selectedCount, depth + 1, maximum, maximumSize, maximumWeight);
+                //discard current vertex from selection, to allow finding maximum independent sets that do not contain the current vertex
                 --selectedCount;
             }
             //continue looking for a maximum independent set, skipping the vertex at the current depth as it intersected with the current selection
-            fill(vertices, criteria, weight, selected, selectedCount, depth + 1, maxPath, maxPathLength, maxPathWeight);
+            fill(vertices, criteria, weight, selected, selectedCount, depth + 1, maximum, maximumSize, maximumWeight);
             return;
         }
         //reached leaf node for path, accumulate weight of independent vertices
@@ -118,10 +118,10 @@ public class RecursiveMaximumWeightIndependentSet {
         for (int i = 0; i < selectedCount; i++) {
             pathWeight += weight.applyAsDouble(vertices.get(selected[i]));
         }
-        if (pathWeight > maxPathWeight[0]) {
-            System.arraycopy(selected, 0, maxPath, 0, selectedCount);
-            maxPathWeight[0] = pathWeight;
-            maxPathLength[0] = selectedCount;
+        if (pathWeight > maximumWeight[0]) {
+            System.arraycopy(selected, 0, maximum, 0, selectedCount);
+            maximumWeight[0] = pathWeight;
+            maximumSize[0] = selectedCount;
         }
     }
 }
