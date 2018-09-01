@@ -137,6 +137,23 @@ public final class Graph<T> {
     }
 
     /**
+     * Finds the vertex of the specified index in the graph.
+     * <p>
+     * The ordering of vertices is determined by the {@link Set} of values when constructing the {@link Graph}.
+     *
+     * @param index the index of the vertex to find
+     * @return the vertex at the specified index in the graph
+     * @throws IllegalArgumentException indicating there is not a vertex present at the specified index in the graph
+     */
+    public T at(int index) {
+        T vertex = indices.inverse().get(index);
+        if (vertex == null) {
+            throw new IllegalArgumentException("A vertex could not be found in the graph at index " + index + ".");
+        }
+        return vertex;
+    }
+
+    /**
      * Finds the index of the specified vertex in the graph.
      * <p>
      * The ordering of vertices is determined by the {@link Set} of values when constructing the {@link Graph}.
@@ -181,7 +198,7 @@ public final class Graph<T> {
      */
     public Stream<T> neighbors(@NonNull T vertex) {
         int index = indexOf(vertex);
-        return Arrays.stream(adjacencyList[index], 0, neighborCount[index]).mapToObj(indices.inverse()::get);
+        return Arrays.stream(adjacencyList[index], 0, neighborCount[index]).mapToObj(this::at);
     }
 
     /**
@@ -196,7 +213,7 @@ public final class Graph<T> {
     public void forEachNeighbor(@NonNull T vertex, Consumer<T> consumer) {
         int index = indexOf(vertex);
         for (int i = 0; i < neighborCount[index]; i++) {
-            consumer.accept(indices.inverse().get(adjacencyList[index][i]));
+            consumer.accept(at(adjacencyList[index][i]));
         }
     }
 
@@ -301,7 +318,7 @@ public final class Graph<T> {
                         continue;
                     }
                     visited[currentVertex] = true;
-                    component.add(indices.inverse().get(currentVertex));
+                    component.add(at(currentVertex));
                     for (int i = 0; i < neighborCount[currentVertex]; i++) {
                         verticesToSearch.push(adjacencyList[currentVertex][i]);
                     }
