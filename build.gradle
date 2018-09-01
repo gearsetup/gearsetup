@@ -5,10 +5,17 @@ allprojects {
 
 subprojects {
     apply plugin: 'java'
+    apply plugin: 'idea'
 
     sourceCompatibility = 1.8
 
     repositories {
         mavenCentral()
+    }
+    idea {
+        module {
+            sourceDirs += file('src/main/generated')
+            generatedSourceDirs += file('src/main/generated')
+        }
     }
 }
