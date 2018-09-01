@@ -18,7 +18,7 @@ Analytics library for optimizing equipment and inventory setup for activities ac
  - [testing](https://github.com/gearsetup/gearsetup/tree/master/testing)
    - Module containing the [junit](https://github.com/junit-team/junit4) utilities
  
-### Loading curated Oldschool Runescape equipment data
+### Loading [Oldschool Runescape](https://oldschool.runescape.com/) equipment data
 The `AmazonS3` `AWSCredentials` that get used must have read-access to the `gearsetup` bucket.
 There is an IAM role `arn:aws:iam::904291115630:role/gearsetup-s3` that is configured for read-only access to S3. Reach out to `@iancaffey` to have permissions setup to allow you to assume this role.
 ```java
@@ -32,8 +32,11 @@ Set<Equipment> equipment = repository.load();
 ```
 
 ### Finding an optimal gear setup
+`OptimalGearSetup` is an API that takes in a given set of equipment that a character could wear along with a heuristic. 
 Any heuristic can be used when ranking equipment setups. Using any data available during runtime, it is possible to create
-gear setups that will give you "max hit" capabilities, deal the highest DPS, etc.
+gear setups that will give you "max hit" capabilities, deal the highest DPS, etc. `OptimalGearSetup` guarantees to produce
+a valid equipment setup that maximizes the heuristic you use for ranking each individual piece of equipment.
+
 #### Strength
 ```java
 import io.gearsetup.OptimalGearSetup;
@@ -58,6 +61,20 @@ import io.gearsetup.OptimalGearSetup;
 
 Set<Equipment> setup = OptimalGearSetup.find(equipment, e -> e.getCombatBonuses().getRangedStrength());
 ```
+
+### Alternate source for [Oldschool Runescape](https://oldschool.runescape.com/) equipment data
+The primary data source for curated [Oldschool Runescape](https://oldschool.runescape.com/) equipment information is the `AmazonS3`
+data that can be accessed through `EquipmentRepository`. However, there's no limitations in the API restricting user-defined data
+sources for `Equipment` information. To facilitate this process, utilities in [gearsetup-gson](https://github.com/gearsetup/gearsetup/tree/master/gearsetup-gson)
+allow for serializing and deserializing the `Equipment` data model.
+```java
+import io.gearsetup.gson.GearSetupGsonFactory;
+
+Gson gson = GearSetupGsonFactory.create();
+Equipment equipment = json.fromJson("{{equipment json}}", Equipment.class);
+String serialized = gson.toJson(equipment);
+```
+
 
 ## License
 ```
