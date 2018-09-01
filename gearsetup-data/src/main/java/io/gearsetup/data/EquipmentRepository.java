@@ -1,6 +1,7 @@
 package io.gearsetup.data;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.google.gson.Gson;
@@ -9,6 +10,7 @@ import io.gearsetup.Equipment;
 import io.gearsetup.gson.GearSetupGsonFactory;
 import io.gearsetup.immutables.ImmutableGearSetupStyle;
 import org.immutables.value.Value.Auxiliary;
+import org.immutables.value.Value.Default;
 import org.immutables.value.Value.Immutable;
 import org.immutables.value.Value.Lazy;
 
@@ -47,11 +49,16 @@ public abstract class EquipmentRepository {
     /**
      * Represents the AWS credentials to use which have access to read from the
      * {@link EquipmentRepository#GEAR_SETUP_BUCKET} bucket to download the {@link Equipment} information.
+     * <p>
+     * The default {@link AWSCredentialsProvider} to use is {@link DefaultAWSCredentialsProviderChain}.
      *
      * @return the AWS credentials to use for S3 to access the gearsetup bucket
      */
+    @Default
     @Auxiliary
-    protected abstract AWSCredentialsProvider getCredentials();
+    protected AWSCredentialsProvider getCredentials() {
+        return new DefaultAWSCredentialsProviderChain();
+    }
 
     /**
      * Represents the {@link AmazonS3} that gets lazily initialized when retrieving the {@link Equipment} information.
