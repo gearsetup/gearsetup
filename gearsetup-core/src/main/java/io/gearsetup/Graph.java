@@ -114,17 +114,7 @@ public final class Graph<T> {
      * @throws IllegalArgumentException indicating one of the vertices is not present in the graph
      */
     public boolean neighbors(@NonNull T one, @NonNull T two) {
-        if (one == two) {
-            return false;
-        }
-        int oneIndex = indexOf(one);
-        int twoIndex = indexOf(two);
-        for (int i = 0; i < neighborCount[oneIndex]; i++) {
-            if (adjacencyList[oneIndex][i] == twoIndex) {
-                return true;
-            }
-        }
-        return false;
+        return one != two && edgePredicate.test(one, two);
     }
 
     /**
