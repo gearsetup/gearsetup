@@ -42,14 +42,34 @@ public class RecursiveMaximumWeightIndependentSet {
      * be a single combination/subset created from the vertices so it is always maximal and graphs with 0 or 1 vertex
      * cannot have edges.
      * <p>
-     * For sets with {@code IndexedGraph#size() >= 2}, a recursive, right-to-left, pre-order, pruning
+     * For graphs with {@code IndexedGraph#size() >= 2}, a recursive, right-to-left, pre-order, pruning
+     * <a href="https://en.wikipedia.org/wiki/Depth-first_search">depth-first search</a> is performed over the binary tree
+     * of vertex combinations to find the independent set that maximizes the specified weighting function.
+     *
+     * @param graph the graph to find the maximum-weight independent set
+     * @param <T>   the type of vertex being used for finding maximum-weight independent set
+     * @return the independent set of vertices that maximize the weight function
+     */
+    public <T> Set<T> find(@NonNull IndexedGraph<T> graph, @NonNull ToDoubleFunction<T> weight) {
+        return find(graph.getVertices(), graph.getEdgePredicate(), weight);
+    }
+
+    /**
+     * Finds the <a href="https://en.wikipedia.org/wiki/Independent_set_(graph_theory)#Finding_maximum_independent_sets">maximum-weight independent set</a>
+     * of the specified vertices, edge predicate, and weighting function.
+     * <p>
+     * For sets with {@code Set#size() < 2}, {@code ImmutableSet.copyOf(vertices)} is returned, as there can only
+     * be a single combination/subset created from the vertices so it is always maximal and graphs with 0 or 1 vertex
+     * cannot have edges.
+     * <p>
+     * For sets with {@code Set#size() >= 2}, a recursive, right-to-left, pre-order, pruning
      * <a href="https://en.wikipedia.org/wiki/Depth-first_search">depth-first search</a> is performed over the binary tree
      * of vertex combinations to find the independent set that maximizes the specified weighting function.
      *
      * @param vertices  the vertices of the graph to consider when finding the maximum-weight independent set
      * @param predicate the edge predicate for determine if two vertices have an edge
      * @param <T>       the type of vertex being used for finding maximum-weight independent set
-     * @return the set of candidates that maximize the weight function without being adjacent to other members of the set
+     * @return the independent set of vertices that maximize the weight function
      */
     public <T> Set<T> find(@NonNull Set<T> vertices, @NonNull BiPredicate<T, T> predicate, @NonNull ToDoubleFunction<T> weight) {
         if (vertices.size() < 2) {

@@ -30,8 +30,29 @@ public class MaximumWeightIndependentSet {
      * cannot have edges.
      * <p>
      * For graphs with {@code IndexedGraph#size() >= 2}, the graph is decomposed into its
-     * <a href="https://en.wikipedia.org/wiki/Connected_component_(graph_theory)">connected components</a> and each
-     * component has {@link }
+     * <a href="https://en.wikipedia.org/wiki/Connected_component_(graph_theory)">connected components</a> where each
+     * component is processed by {@link RecursiveMaximumWeightIndependentSet} and the results are aggregated into a set.
+     *
+     * @param graph  the graph to find the maximum-weight independent set
+     * @param weight the weighting function for each candidate
+     * @param <T>    the type of value being used for finding maximum-weight independent set
+     * @return the independent set of vertices that maximize the weight function
+     */
+    public <T> Set<T> find(@NonNull IndexedGraph<T> graph, @NonNull ToDoubleFunction<T> weight) {
+        return find(graph.getVertices(), graph.getEdgePredicate(), weight);
+    }
+
+    /**
+     * Finds the<a href="https://en.wikipedia.org/wiki/Independent_set_(graph_theory)#Finding_maximum_independent_sets">maximum-weight independent set</a>
+     * of the specified vertices, edge predicate, and weighting function.
+     * <p>
+     * For sets with {@code IndexedGraph#size() < 2}, {@link IndexedGraph#getVertices()} is returned, as there can only
+     * be a single combination/subset created from the vertices so it is always maximal and graphs with 0 or 1 vertex
+     * cannot have edges.
+     * <p>
+     * For sets with {@code IndexedGraph#size() >= 2}, the {@link IndexedGraph} of the vertices is decomposed into its
+     * <a href="https://en.wikipedia.org/wiki/Connected_component_(graph_theory)">connected components</a> where each
+     * component is processed by {@link RecursiveMaximumWeightIndependentSet} and the results are aggregated into a set.
      *
      * @param vertices  the vertices of the graph to consider when finding the maximum-weight independent set
      * @param predicate the edge predicate for determine if two vertices have an edge
@@ -39,7 +60,7 @@ public class MaximumWeightIndependentSet {
      * @param <T>       the type of value being used for finding maximum-weight independent set
      * @return the independent set of vertices that maximize the weight function
      */
-    public <T> Set<T> find(@NonNull Set<T> vertices, @NonNull BiPredicate<T, T> predicate, ToDoubleFunction<T> weight) {
+    public <T> Set<T> find(@NonNull Set<T> vertices, @NonNull BiPredicate<T, T> predicate, @NonNull ToDoubleFunction<T> weight) {
         if (vertices.size() < 2) {
             return ImmutableSet.copyOf(vertices);
         }
