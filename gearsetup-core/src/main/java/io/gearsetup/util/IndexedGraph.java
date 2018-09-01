@@ -1,4 +1,4 @@
-package io.gearsetup;
+package io.gearsetup.util;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;

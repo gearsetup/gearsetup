@@ -1,4 +1,4 @@
-package io.gearsetup;
+package io.gearsetup.util;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;

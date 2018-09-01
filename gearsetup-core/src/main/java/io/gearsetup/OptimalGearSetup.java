@@ -2,6 +2,7 @@ package io.gearsetup;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import io.gearsetup.util.MaximumWeightIndependentSet;
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
