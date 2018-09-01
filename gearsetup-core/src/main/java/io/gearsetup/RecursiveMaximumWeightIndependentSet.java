@@ -16,7 +16,7 @@ import java.util.function.ToDoubleFunction;
  * that preforms a recursive, right-to-left, pre-order, pruning <a href="https://en.wikipedia.org/wiki/Depth-first_search">depth-first search</a>
  * over the binary tree of set combinations to find the independent set that maximizes an arbitrary weighting function.
  * <p>
- * {@link RecursiveMaximumWeightIndependentSet} defines a graph as a {@link Set} of objects with an edge predicate.
+ * {@link RecursiveMaximumWeightIndependentSet} defines a graph as a {@link Set} of vertices with an edge predicate.
  * An edge predicate is a {@link BiPredicate} that takes in two vertices and returns {@code true} if there is an
  * edge between the vertices.
  * <p>
