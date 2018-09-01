@@ -5,3 +5,5 @@ include 'gearsetup-model'
 include 'immutables'
 include 'lombok'
 include 'testing'
+include 'gearsetup-data'
+

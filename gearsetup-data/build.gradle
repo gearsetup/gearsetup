@@ -1,0 +1,4 @@
+dependencies {
+    compile project(':gearsetup-gson')
+    compile group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.11.400'
+}
