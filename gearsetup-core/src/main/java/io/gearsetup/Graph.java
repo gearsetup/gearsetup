@@ -1,17 +1,15 @@
 package io.gearsetup;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableSet;
+import lombok.Getter;
 import lombok.NonNull;
 
 import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 /**
  * An implementation of a <a href="https://en.wikipedia.org/wiki/Graph_(abstract_data_type)">Graph</a> that
@@ -25,32 +23,49 @@ import java.util.stream.StreamSupport;
  * @since 1.0
  */
 public final class Graph<T> {
-    private final List<T> vertices;
+    @Getter
+    private final Set<T> vertices;
+    @Getter
+    private final BiPredicate<T, T> edgePredicate;
     private final int[] neighborCount;
-    private final boolean[][] adjacencyMatrix;
-    private final Map<T, Integer> indices;
+    private final int[][] adjacencyList;
+    private final BiMap<T, Integer> indices;
 
     /**
      * Constructs a new {@link Graph} of the specified values using the specified edge predicate for building the graph edges.
      *
-     * @param vertices the vertices of the graph
-     * @param criteria the edge predicate for determine if two vertices have an edge
+     * @param vertices      the vertices of the graph
+     * @param edgePredicate the edge predicate for determine if two vertices have an edge
      */
-    private Graph(@NonNull Set<T> vertices, @NonNull BiPredicate<T, T> criteria) {
+    private Graph(@NonNull Set<T> vertices, @NonNull BiPredicate<T, T> edgePredicate) {
         int size = vertices.size();
-        this.vertices = ImmutableList.copyOf(vertices);
-        this.indices = IntStream.range(0, size).boxed().collect(ImmutableMap.toImmutableMap(this.vertices::get, Function.identity()));
-        int[] neighborCount = new int[size];
-        boolean[][] adjacencyMatrix = new boolean[size][size];
-        AdjacencyMatrix.fillWithCounts(this.vertices, criteria, adjacencyMatrix, neighborCount);
-        this.neighborCount = neighborCount;
-        this.adjacencyMatrix = adjacencyMatrix;
+        int[] neighborCounts = new int[size];
+        int[][] adjacencyList = new int[size][size];
+        ImmutableBiMap.Builder<T, Integer> builder = ImmutableBiMap.builder();
+        int vertexIndex = 0;
+        for (T vertex : vertices) {
+            int otherIndex = 0;
+            int neighbors = 0;
+            for (T other : vertices) {
+                if (vertex != other && edgePredicate.test(vertex, other)) {
+                    adjacencyList[vertexIndex][neighbors++] = otherIndex;
+                }
+                otherIndex++;
+            }
+            neighborCounts[vertexIndex] = neighbors;
+            builder.put(vertex, vertexIndex++);
+        }
+        this.vertices = ImmutableSet.copyOf(vertices);
+        this.edgePredicate = edgePredicate;
+        this.adjacencyList = adjacencyList;
+        this.neighborCount = neighborCounts;
+        this.indices = builder.build();
     }
 
     /**
      * Constructs a new {@link Graph} of the specified values using the specified edge predicate for building the graph.
      *
-     * @param vertices the values to use when building the intersection graph
+     * @param vertices the values to use when building the graph
      * @param criteria the edge predicate for determine if two vertices have an edge
      * @param <T>      the type of the vertices in the graph
      * @return a new {@link Graph} represented by the vertices and edge predicate
@@ -82,7 +97,7 @@ public final class Graph<T> {
      * @throws IllegalArgumentException indicating the vertex is not present in the graph
      */
     public int neighborCount(@NonNull T vertex) {
-        return neighborCount[indexOrThrow(vertex)];
+        return neighborCount[indexOf(vertex)];
     }
 
     /**
@@ -99,7 +114,43 @@ public final class Graph<T> {
      * @throws IllegalArgumentException indicating one of the vertices is not present in the graph
      */
     public boolean neighbors(@NonNull T one, @NonNull T two) {
-        return one != two && adjacencyMatrix[indexOrThrow(one)][indexOrThrow(two)];
+        if (one == two) {
+            return false;
+        }
+        int oneIndex = indexOf(one);
+        int twoIndex = indexOf(two);
+        for (int i = 0; i < neighborCount[oneIndex]; i++) {
+            if (adjacencyList[oneIndex][i] == twoIndex) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Represents the total number of vertices in the graph.
+     *
+     * @return the total vertex count
+     */
+    public int size() {
+        return vertices.size();
+    }
+
+    /**
+     * Finds the index of the specified vertex in the graph.
+     * <p>
+     * The ordering of vertices is determined by the {@link Set} of values when constructing the {@link Graph}.
+     *
+     * @param vertex the vertex to find
+     * @return the index of the vertex in the graph
+     * @throws IllegalArgumentException indicating the vertex is not present in the graph
+     */
+    public int indexOf(@NonNull T vertex) {
+        Integer index = indices.get(vertex);
+        if (index == null) {
+            throw new IllegalArgumentException(vertex + " could not be found in the graph.");
+        }
+        return index;
     }
 
     /**
@@ -127,29 +178,26 @@ public final class Graph<T> {
      * @param vertex the vertex to stream neighboring vertices
      * @return a {@link Stream} of the vertices which intersect the specified vertex
      * @throws IllegalArgumentException indicating the vertex is not present in the graph
-     * @see Graph#neighborIterator(int)
      */
     public Stream<T> neighbors(@NonNull T vertex) {
-        int index = indexOrThrow(vertex);
-        int characteristics = Spliterator.DISTINCT | Spliterator.SIZED | Spliterator.NONNULL | Spliterator.IMMUTABLE | Spliterator.SUBSIZED;
-        return StreamSupport.stream(Spliterators.spliterator(neighborIterator(index), neighborCount[index], characteristics), false);
+        int index = indexOf(vertex);
+        return Arrays.stream(adjacencyList[index], 0, neighborCount[index]).mapToObj(indices.inverse()::get);
     }
 
     /**
      * Applies the specified {@link Consumer} to each neighboring vertex of the specified vertex. A neighboring
      * vertex is a vertex that has an edge with the specified vertex.
-     * <p>
-     * The {@link Iterator} internally used when applying the function finds the neighboring vertices of
-     * the vertex lazily, so it is advised to limit the number of repeated iterations over the neighboring vertices.
      *
      * @param vertex   the vertex whose neighbors to find
      * @param consumer the function to apply to each neighbor of the vertex
      * @throws IllegalArgumentException indicating the vertex is not present in the graph
-     * @see Graph#indexOrThrow(Object)
-     * @see Graph#neighborIterator(int)
+     * @see Graph#indexOf(Object)
      */
     public void forEachNeighbor(@NonNull T vertex, Consumer<T> consumer) {
-        neighborIterator(indexOrThrow(vertex)).forEachRemaining(consumer);
+        int index = indexOf(vertex);
+        for (int i = 0; i < neighborCount[index]; i++) {
+            consumer.accept(indices.inverse().get(adjacencyList[index][i]));
+        }
     }
 
     /**
@@ -253,8 +301,10 @@ public final class Graph<T> {
                         continue;
                     }
                     visited[currentVertex] = true;
-                    component.add(vertices.get(currentVertex));
-                    neighborIterator(currentVertex).forEachRemaining(neighbor -> verticesToSearch.push(indexOrThrow(neighbor)));
+                    component.add(indices.inverse().get(currentVertex));
+                    for (int i = 0; i < neighborCount[currentVertex]; i++) {
+                        verticesToSearch.push(adjacencyList[currentVertex][i]);
+                    }
                 }
                 this.component = component.build();
             }
@@ -269,91 +319,5 @@ public final class Graph<T> {
                 }
             }
         };
-    }
-
-    /**
-     * Constructs an {@link Iterator} that iterates over each neighboring vertex of the vertex at the specified index.
-     * A neighboring vertex is a vertex that has an edge with the specified vertex.
-     * <p>
-     * The {@link Iterator} produces the neighboring vertices of specified the vertex lazily, so it is advised to
-     * limit the number of repeated iterations over the neighboring vertices.
-     *
-     * @return an {@link Iterator} that produces each connected component of the graph
-     * @throws IllegalArgumentException indicating the vertex is not valid for the graph
-     */
-    private Iterator<T> neighborIterator(int index) {
-        int size = vertices.size();
-        if (index < 0 || index >= size) {
-            throw new IllegalArgumentException(index + " is not a valid index for a graph with " + size + " vertices.");
-        }
-        return new Iterator<T>() {
-            private final boolean[] potentialNeighbors = adjacencyMatrix[index];
-            private int currentIndex;
-            private boolean checkedNextNeighbor;
-
-            /**
-             * Attempts to find the next neighboring vertex, if not already found.
-             *
-             * Neighboring vertices are guaranteed to be found in ascending index order.
-             * <p>
-             * The ordering of vertices is determined by the {@link Set} of values when constructing the {@link Graph}.
-             *
-             * @return {@code true} if there
-             */
-            @Override
-            public boolean hasNext() {
-                if (!checkedNextNeighbor) {
-                    moveToNextNeighbor();
-                }
-                return currentIndex < potentialNeighbors.length;
-            }
-
-            /**
-             * Finds the next neighboring vertex, if not already found by {@link #hasNext()}.
-             *
-             * Neighboring vertices are guaranteed to be found in ascending index order.
-             * <p>
-             * The ordering of vertices is determined by the {@link Set} of values when constructing the {@link Graph}.
-             *
-             * @return {@code true} if there was a neighbor already found or one remaining for the vertex
-             * @throws NoSuchElementException if there does not exist another neighbor the vertex
-             */
-            @Override
-            public T next() {
-                if (!hasNext()) {
-                    throw new NoSuchElementException();
-                }
-                checkedNextNeighbor = false;
-                return vertices.get(currentIndex++); //get current and move cursor to next index to enable searching for next neighbor
-            }
-
-            /**
-             * Moves the current cursor in the adjacency matrix to the next neighbor of the vertex. If the vertex at the
-             * current index is a neighbor, the index <b>does not</b> change.
-             */
-            private void moveToNextNeighbor() {
-                while (currentIndex < potentialNeighbors.length && !potentialNeighbors[currentIndex]) {
-                    currentIndex++;
-                }
-                checkedNextNeighbor = true;
-            }
-        };
-    }
-
-    /**
-     * Finds the index of the specified vertex in the graph.
-     * <p>
-     * The ordering of vertices is determined by the {@link Set} of values when constructing the {@link Graph}.
-     *
-     * @param vertex the vertex to find
-     * @return the index of the vertex in the graph
-     * @throws IllegalArgumentException indicating the vertex is not present in the graph
-     */
-    private int indexOrThrow(@NonNull T vertex) {
-        Integer index = indices.get(vertex);
-        if (index == null) {
-            throw new IllegalArgumentException(vertex + " could not be found in the graph.");
-        }
-        return index;
     }
 }
