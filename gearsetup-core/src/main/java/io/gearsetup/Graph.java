@@ -36,7 +36,7 @@ public final class Graph<T> {
      * @param vertices the vertices of the graph
      * @param criteria the edge predicate for determine if two vertices have an edge
      */
-    public Graph(@NonNull Set<T> vertices, @NonNull BiPredicate<T, T> criteria) {
+    private Graph(@NonNull Set<T> vertices, @NonNull BiPredicate<T, T> criteria) {
         int size = vertices.size();
         this.vertices = ImmutableList.copyOf(vertices);
         this.indices = IntStream.range(0, size).boxed().collect(ImmutableMap.toImmutableMap(this.vertices::get, Function.identity()));
@@ -45,6 +45,18 @@ public final class Graph<T> {
         AdjacencyMatrix.fillWithCounts(this.vertices, criteria, adjacencyMatrix, neighborCount);
         this.neighborCount = neighborCount;
         this.adjacencyMatrix = adjacencyMatrix;
+    }
+
+    /**
+     * Constructs a new {@link Graph} of the specified values using the specified edge predicate for building the graph.
+     *
+     * @param vertices the values to use when building the intersection graph
+     * @param criteria the edge predicate for determine if two vertices have an edge
+     * @param <T>      the type of the vertices in the graph
+     * @return a new {@link Graph} represented by the vertices and edge predicate
+     */
+    public static <T> Graph<T> of(Set<T> vertices, BiPredicate<T, T> criteria) {
+        return new Graph<>(vertices, criteria);
     }
 
     /**
