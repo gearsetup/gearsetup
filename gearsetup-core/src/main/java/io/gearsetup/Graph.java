@@ -114,7 +114,9 @@ public final class Graph<T> {
      * @throws IllegalArgumentException indicating one of the vertices is not present in the graph
      */
     public boolean neighbors(@NonNull T one, @NonNull T two) {
-        return one != two && edgePredicate.test(one, two);
+        //indexOf equality is performed instead of one != two to also guarantee the vertices are in the graph
+        //it's possible to pass in an edge predicate that satisfies more values outside the specified set of vertices
+        return indexOf(one) != indexOf(two) && edgePredicate.test(one, two);
     }
 
     /**
