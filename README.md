@@ -38,25 +38,25 @@ gear setups that will give you "max hit" capabilities, deal the highest DPS, etc
 ```java
 import io.gearsetup.OptimalGearSetup;
 
-Set<Equipment> equipment = OptimalGearSetup.find(candidates, e -> e.getCombatBonuses().getMeleeStrength());
+Set<Equipment> setup = OptimalGearSetup.find(equipment, e -> e.getCombatBonuses().getMeleeStrength());
 ```
 #### Defence
 ```java
 import io.gearsetup.OptimalGearSetup;
 
-Set<Equipment> equipment = OptimalGearSetup.find(candidates, e -> e.getCombatBonuses().getDefenceBonuses().getSlashBonus());
+Set<Equipment> setup = OptimalGearSetup.find(equipment, e -> e.getCombatBonuses().getDefenceBonuses().getSlashBonus());
 ```
 #### Prayer
 ```java
 import io.gearsetup.OptimalGearSetup;
 
-Set<Equipment> equipment = OptimalGearSetup.find(candidates, e -> e.getCombatBonuses().getPrayerBonus());
+Set<Equipment> setup = OptimalGearSetup.find(equipment, e -> e.getCombatBonuses().getPrayerBonus());
 ```
 #### Ranged
 ```java
 import io.gearsetup.OptimalGearSetup;
 
-Set<Equipment> equipment = OptimalGearSetup.find(candidates, e -> e.getCombatBonuses().getRangedStrength());
+Set<Equipment> setup = OptimalGearSetup.find(equipment, e -> e.getCombatBonuses().getRangedStrength());
 ```
 
 ## License
