@@ -14,8 +14,11 @@ subprojects {
     }
     idea {
         module {
-            sourceDirs += file('src/main/generated')
-            generatedSourceDirs += file('src/main/generated')
+            sourceDirs += new File(buildDir, 'generated')
+            generatedSourceDirs += new File(buildDir, 'generated')
         }
+    }
+    compileJava {
+        options.annotationProcessorGeneratedSourcesDirectory = new File(buildDir, 'generated')
     }
 }
