@@ -4,7 +4,6 @@ import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import io.gearsetup.AttackSpeed;
 import io.gearsetup.AttackType;
-import io.gearsetup.ImmutableTypeDependentAttackSpeed;
 import io.gearsetup.TypeDependentAttackSpeed;
 import lombok.experimental.UtilityClass;
 
@@ -46,7 +45,7 @@ public class GearSetupGsonFactory {
         );
         gsonBuilder.registerTypeAdapter(TypeDependentAttackSpeed.class, (JsonDeserializer<TypeDependentAttackSpeed>) (json, typeOfT, context) -> {
             Map<AttackType, AttackSpeed> speeds = context.deserialize(json, TypeToken.getParameterized(Map.class, AttackType.class, AttackSpeed.class).getType());
-            return ImmutableTypeDependentAttackSpeed.of(speeds);
+            return TypeDependentAttackSpeed.of(speeds);
         });
         return gsonBuilder.create();
     }

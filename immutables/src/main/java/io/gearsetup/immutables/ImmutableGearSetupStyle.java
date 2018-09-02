@@ -21,9 +21,11 @@ import org.immutables.value.Value.Style;
         defaults = @Immutable(prehash = true),
         get = {"get*", "is*"},
         init = "set*",
+        depluralize = true,
         allParameters = true,
         overshadowImplementation = true,
-        depluralize = true
+        visibility = Style.ImplementationVisibility.PACKAGE,
+        builderVisibility = Style.BuilderVisibility.PACKAGE
 )
 public @interface ImmutableGearSetupStyle {
 }
