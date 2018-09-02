@@ -1,5 +1,5 @@
-# [gearsetup](https://gearsetup.io)
-[![GitHub license](https://img.shields.io/github/license/gearsetup/gearsetup.svg)](https://github.com/gearsetup/gearsetup/blob/master/LICENSE) [![GitHub stars](https://img.shields.io/github/stars/gearsetup/gearsetup.svg?style=social)](https://github.com/gearsetup/gearsetup/stargazers) [![GitHub issues](https://img.shields.io/github/issues/gearsetup/gearsetup.svg?style=social)](https://github.com/gearsetup/gearsetup/issues)
+# [gearsetup](https://gearsetup.io) [![GitHub license](https://img.shields.io/github/license/gearsetup/gearsetup.svg)](https://github.com/gearsetup/gearsetup/blob/master/LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/gearsetup/gearsetup.svg?style=social)](https://github.com/gearsetup/gearsetup/stargazers) [![GitHub issues](https://img.shields.io/github/issues/gearsetup/gearsetup.svg?style=social)](https://github.com/gearsetup/gearsetup/issues)
 
 Analytics library for optimizing equipment and inventory setup for activities across Runescape.
 
