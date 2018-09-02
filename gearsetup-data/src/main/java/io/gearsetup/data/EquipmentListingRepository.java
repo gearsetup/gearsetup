@@ -2,9 +2,8 @@ package io.gearsetup.data;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
-import com.amazonaws.services.dynamodbv2.document.Table;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import io.gearsetup.Equipment;
@@ -19,7 +18,7 @@ import java.lang.reflect.Type;
 import java.util.Set;
 
 /**
- * A representation of a repository of {@link Equipment} information stored in {@link AmazonDynamoDB}.
+ * A representation of a repository of {@link Equipment} information stored in {@link AmazonS3}.
  * <p>
  * {@link Equipment} information for the entire <a href="https://oldschool.runescape.com/">Old School Runescape</a> is
  * maintained in the {@code gearsetup} S3 bucket in an {@code equipment.json} file.
@@ -29,18 +28,19 @@ import java.util.Set;
  */
 @Immutable
 @ImmutableGearSetupStyle
-public abstract class EquipmentRepository {
+public abstract class EquipmentListingRepository {
     private static final String GEAR_SETUP_BUCKET = "gearsetup";
+    private static final String EQUIPMENT_FILE = "equipment.json";
     private static final Type EQUIPMENT_SET = TypeToken.getParameterized(Set.class, Equipment.class).getType();
     private static final Gson GSON = GearSetupGsonFactory.create();
 
     //Immutables builder stub to hide immutable class dependency
     public static Builder builder() {
-        return ImmutableEquipmentRepository.builder();
+        return ImmutableEquipmentListingRepository.builder();
     }
 
     /**
-     * Represents the AWS region to use when contacting {@link AmazonDynamoDB}.
+     * Represents the AWS region to use when contacting {@link AmazonS3}.
      *
      * @return the AWS region to use for S3
      */
@@ -48,7 +48,7 @@ public abstract class EquipmentRepository {
 
     /**
      * Represents the AWS credentials to use which have access to read from the
-     * {@link EquipmentRepository#GEAR_SETUP_BUCKET} bucket to download the {@link Equipment} information.
+     * {@link EquipmentListingRepository#GEAR_SETUP_BUCKET} bucket to download the {@link Equipment} information.
      * <p>
      * The default {@link AWSCredentialsProvider} to use is {@link DefaultAWSCredentialsProviderChain}.
      *
@@ -61,25 +61,31 @@ public abstract class EquipmentRepository {
     }
 
     /**
-     * Represents the {@link AmazonDynamoDB} that gets lazily initialized when retrieving the {@link Equipment} information.
+     * Represents the {@link AmazonS3} that gets lazily initialized when retrieving the {@link Equipment} information.
      *
      * @return the S3 client to use for retrieving equipment data
      */
     @Lazy
-    protected AmazonDynamoDB getDynamoDB() {
-        return AmazonDynamoDBClient.builder()
+    protected AmazonS3 getAmazonS3() {
+        return AmazonS3Client.builder()
                 .withRegion(getRegion())
                 .withCredentials(getCredentials())
                 .build();
     }
 
+    /**
+     * Loads the current {@link Equipment} information from S3 using {@link EquipmentListingRepository#getAmazonS3()}.
+     * <p>
+     * The call to retrieve {@link Equipment} information S3 only happens once and the results are cached for future calls.
+     * <p>
+     * {@link GearSetupGsonFactory} is used internally to create the {@link Gson} used to deserialize the
+     * {@link Equipment} information.
+     *
+     * @return the current set of equipment metadata present in S3
+     */
     @Lazy
-    protected Table getEquipmentTable() {
-        return new Table(getDynamoDB(), "equipment");
-    }
-
-    public Equipment findById(int id) {
-        return getEquipmentTable().getItem("id", id);
+    public Set<Equipment> load() {
+        return GSON.fromJson(getAmazonS3().getObjectAsString(GEAR_SETUP_BUCKET, EQUIPMENT_FILE), EQUIPMENT_SET);
     }
 
     //Immutables builder stub to hide immutable class dependency
@@ -88,6 +94,6 @@ public abstract class EquipmentRepository {
 
         Builder setCredentials(AWSCredentialsProvider credentials);
 
-        EquipmentRepository build();
+        EquipmentListingRepository build();
     }
 }

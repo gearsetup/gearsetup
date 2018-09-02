@@ -23,9 +23,9 @@ Analytics library for optimizing equipment and inventory setup for activities ac
 The `AmazonS3` `AWSCredentials` that get used must have read-access to the `gearsetup` bucket.
 There is an IAM role `arn:aws:iam::904291115630:role/gearsetup-s3` that is configured for read-only access to S3. Reach out to `@iancaffey` to have permissions setup to allow you to assume this role.
 ```java
-import io.gearsetup.data.EquipmentRepository;
+import io.gearsetup.data.EquipmentListingRepository;
 
-EquipmentRepository repository = EquipmentRepository.builder()
+EquipmentListingRepository repository = EquipmentListingRepository.builder()
         .setRegion("us-east-1")
         .setCredentials(...)
         .build();
