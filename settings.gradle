@@ -1,9 +1,10 @@
 rootProject.name = 'gearsetup'
 include 'gearsetup-core'
+include 'gearsetup-data'
 include 'gearsetup-gson'
 include 'gearsetup-model'
+include 'gearsetup-snapshot'
 include 'immutables'
 include 'lombok'
 include 'testing'
-include 'gearsetup-data'
 
