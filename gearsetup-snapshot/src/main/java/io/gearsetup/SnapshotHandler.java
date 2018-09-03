@@ -48,15 +48,15 @@ public class SnapshotHandler implements RequestHandler<SnapshotRequest, Snapshot
         String bucket = request.getBucket();
         String key = table + "/" + time + ".json";
         String latestKey = table + "/latest.json";
-        Set<Map<String, Object>> objects = new HashSet<>();
-        new Table(dynamoDb, table).scan().forEach(item -> objects.add(item.asMap()));
-        String output = gson.toJson(objects);
-        amazonS3.putObject(bucket, key, output);
-        amazonS3.putObject(bucket, latestKey, output);
+        Set<Map<String, Object>> items = new HashSet<>();
+        new Table(dynamoDb, table).scan().forEach(item -> items.add(item.asMap()));
+        String snapshot = gson.toJson(items);
+        amazonS3.putObject(bucket, key, snapshot);
+        amazonS3.putObject(bucket, latestKey, snapshot);
         return SnapshotResponse.builder()
                 .time(time)
                 .destination(String.format("s3://%s/%s", bucket, key))
-                .snapshotSize(objects.size())
+                .snapshotSize(items.size())
                 .build();
     }
 }
