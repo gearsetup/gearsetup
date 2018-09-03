@@ -21,6 +21,17 @@ Analytics library for optimizing equipment and inventory setup for activities ac
  - [testing](https://github.com/gearsetup/gearsetup/tree/master/testing)
    - Module containing the [junit](https://github.com/junit-team/junit4) utilities
  
+## Project Setup
+
+[gearsetup](https://gearsetup.io) uses [gradle](https://gradle.org/) for a build system.
+
+`gradle build` to build all [gearsetup](https://gearsetup.io) library.
+
+To avoid multiple class file conflicts in [IntelliJ](https://www.jetbrains.com/idea/) when running the [Immutables](https://github.com/immutables/immutables) annotation processor:
+   - `Settings > Build`, `Execution, Deployment` > `Gradle` >` Runner` > [x] `Delegate IDE build/run actions to gradle`
+   - Annotation processors can also be disabled due to [gradle](https://gradle.org/) handling annotation processors during `gradle build`.
+ 
+ 
 ## Loading [Oldschool Runescape](https://oldschool.runescape.com/) equipment data
 The `AmazonS3` `AWSCredentials` that get used must have read-access to the `gearsetup` bucket.
 There is an IAM role `arn:aws:iam::904291115630:role/gearsetup-s3` that is configured for read-only access to S3. Reach out to `@iancaffey` to have permissions setup to allow you to assume this role.
