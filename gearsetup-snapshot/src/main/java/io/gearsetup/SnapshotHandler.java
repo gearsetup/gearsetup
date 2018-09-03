@@ -10,6 +10,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.google.gson.Gson;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -47,8 +48,8 @@ public class SnapshotHandler implements RequestHandler<SnapshotRequest, Snapshot
         String bucket = request.getBucket();
         String key = table + "/" + time + ".json";
         String latestKey = table + "/latest.json";
-        Set<Object> objects = new HashSet<>();
-        new Table(dynamoDb, table).scan().forEach(objects::add);
+        Set<Map<String, Object>> objects = new HashSet<>();
+        new Table(dynamoDb, table).scan().forEach(item -> objects.add(item.asMap()));
         String output = gson.toJson(objects);
         amazonS3.putObject(bucket, key, output);
         amazonS3.putObject(bucket, latestKey, output);
