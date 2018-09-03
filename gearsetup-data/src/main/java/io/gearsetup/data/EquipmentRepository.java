@@ -31,10 +31,15 @@ public abstract class EquipmentRepository {
 
     /**
      * Represents the AWS region to use when contacting {@link AmazonS3}.
+     * <p>
+     * The default AWS region to use is {@code us-east-1}.
      *
      * @return the AWS region to use for S3
      */
-    protected abstract String getRegion();
+    @Default
+    protected String getRegion() {
+        return "us-east-1";
+    }
 
     /**
      * Represents the AWS credentials to use which have access to read from the {@code gearsetup} bucket to download the
