@@ -10,6 +10,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.google.gson.Gson;
 
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * An implementation of an Amazon Lambda {@link RequestHandler} that takes snapshots of {@link AmazonDynamoDB} tables
@@ -46,7 +47,7 @@ public class SnapshotHandler implements RequestHandler<SnapshotRequest, Snapshot
         String bucket = request.getBucket();
         String key = table + "/" + time + ".json";
         String latestKey = table + "/latest.json";
-        HashSet<Object> objects = new HashSet<>();
+        Set<Object> objects = new HashSet<>();
         new Table(dynamoDb, table).scan().forEach(objects::add);
         String output = gson.toJson(objects);
         amazonS3.putObject(bucket, key, output);
