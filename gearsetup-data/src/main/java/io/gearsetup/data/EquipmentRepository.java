@@ -15,8 +15,8 @@ import java.util.Set;
 /**
  * A representation of a repository of {@link Equipment} snapshot stored in {@link AmazonS3}.
  * <p>
- * {@link Equipment} information for the entire <a href="https://oldschool.runescape.com/">Old School Runescape</a> is
- * maintained in the {@code gearsetup} S3 bucket in an {@code equipment.json} file.
+ * {@link Equipment} snapshots for the entire <a href="https://oldschool.runescape.com/">Old School Runescape</a> are
+ * maintained in the {@code gearsetup} S3 bucket in the {@code Equipment} directory.
  *
  * @author Ian Caffey
  * @since 1.0
@@ -27,6 +27,16 @@ public abstract class EquipmentRepository {
     //Immutables builder stub to hide immutable class dependency
     public static Builder builder() {
         return ImmutableEquipmentRepository.builder();
+    }
+
+    /**
+     * Constructs a new {@link EquipmentRepository} that uses the {@code us-east-1} AWS region and the
+     * {@link DefaultAWSCredentialsProviderChain} to provide credentials for retrieving {@link Equipment} snapshots.
+     *
+     * @return the standard {@link EquipmentRepository}
+     */
+    public static EquipmentRepository standard() {
+        return EquipmentRepository.builder().build();
     }
 
     /**
@@ -43,7 +53,7 @@ public abstract class EquipmentRepository {
 
     /**
      * Represents the AWS credentials to use which have access to read from the {@code gearsetup} bucket to download the
-     * {@link Equipment} information.
+     * {@link Equipment} snapshots.
      * <p>
      * The default {@link AWSCredentialsProvider} to use is {@link DefaultAWSCredentialsProviderChain}.
      *
