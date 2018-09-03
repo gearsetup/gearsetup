@@ -7,4 +7,5 @@ include 'gearsetup-snapshot'
 include 'immutables'
 include 'lombok'
 include 'testing'
+include 'playground'
 
