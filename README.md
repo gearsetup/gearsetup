@@ -27,10 +27,7 @@ There is an IAM role `arn:aws:iam::904291115630:role/gearsetup-s3` that is confi
 ```java
 import io.gearsetup.data.EquipmentRepository;
 
-EquipmentRepository repository = EquipmentRepository.builder()
-        .setRegion("us-east-1")
-        .setCredentials(...)
-        .build();
+EquipmentRepository repository = EquipmentRepository.standard();
 Set<Equipment> equipment = repository.load();
 ```
 
